@@ -1,15 +1,15 @@
 import { ImageBackground, StyleSheet, Text, View } from "react-native";
 import React from "react";
-import AppButton from "../components/input/AppButton";
-import colors from "../utils/colors";
-import Logo from "../components/Logo";
-import routes from "../navigation/routes";
+import AppButton from "../../components/input/AppButton";
+import colors from "../../utils/colors";
+import Logo from "../../components/Logo";
+import routes from "../../navigation/routes";
 
 const WelcomeScreen = ({ navigation }) => {
   return (
     <ImageBackground
       style={styles.background}
-      source={require("../assets/shopping-1.jpg")}
+      source={require("../../assets/shopping-1.jpg")}
       resizeMode="cover"
     >
       <View style={styles.col}>

@@ -1,9 +1,8 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { useState } from "react";
-import { StyleSheet } from "react-native";
 import { UserContextProvider } from "./app/context/UserContext";
 import useSecureStore from "./app/hooks/useSecureStore";
-import AuthNavigation from "./app/navigation/AuthNavigation";
+import MainNavigation from "./app/navigation/MainNavigation";
 
 export default function App() {
   const [token, setToken, clearToken] = useSecureStore("token", null);
@@ -11,7 +10,7 @@ export default function App() {
   return (
     <UserContextProvider value={{ token, setToken, clearToken, user, setUser }}>
       <NavigationContainer>
-        <AuthNavigation />
+        <MainNavigation />
       </NavigationContainer>
     </UserContextProvider>
   );

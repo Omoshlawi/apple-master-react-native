@@ -1,11 +1,11 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
-import Logo from "../components/Logo";
-import TextInputField from "../components/input/TextInputField";
-import PasswordInputField from "../components/input/PasswordInputField";
-import colors from "../utils/colors";
-import AppButton from "../components/input/AppButton";
-import routes from "../navigation/routes";
+import Logo from "../../components/Logo";
+import TextInputField from "../../components/input/TextInputField";
+import PasswordInputField from "../../components/input/PasswordInputField";
+import colors from "../../utils/colors";
+import AppButton from "../../components/input/AppButton";
+import routes from "../../navigation/routes";
 
 const RegisterScreen = ({ navigation }) => {
   const [formState, setFormState] = useState({
