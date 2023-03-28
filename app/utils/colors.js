@@ -6,5 +6,5 @@ export default {
   white: "#fff",
   black: "#000",
   dark: "#545454",
-  back1: "#000000dd"
+  back1: "#000000dd",
 };

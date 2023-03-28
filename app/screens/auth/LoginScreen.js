@@ -7,21 +7,25 @@ import colors from "../../utils/colors";
 import AppButton from "../../components/input/AppButton";
 import routes from "../../navigation/routes";
 import { useUser } from "../../api/hooks";
+import { useUserContext } from "../../context/hooks";
 
 const LoginScreen = ({ navigation }) => {
   const [formState, setFormState] = useState({
     username: "",
     password: "",
   });
+  const { setToken, setUser } = useUserContext();
   const { login } = useUser();
 
   const handleLogin = async () => {
-    try {
-      const response = await login(formState);
-      console.log(response.data);
-    } catch ({ response: { data, status } }) {
-      console.log(data, status);
-    }
+    const response = await login(formState);
+    if (!response.ok)
+      return console.log("LoginScreen: ", response.problem, response.data);
+    const { data: user } = response;
+    const token = user.token;
+    delete user.token;
+    setUser(user);
+    setToken(token)
   };
 
   return (
@@ -53,7 +57,7 @@ const LoginScreen = ({ navigation }) => {
               navigation.navigate(routes.REGISTER_SCREEN);
             }}
           >
-            <Text style={{ color: colors.primary }}>Sign up</Text>
+            <Text style={{ color: colors.medium }}>Sign up</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -72,5 +76,6 @@ const styles = StyleSheet.create({
   },
   form: {
     width: "90%",
+    paddingTop: 20,
   },
 });

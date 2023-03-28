@@ -12,7 +12,7 @@ const Screen = Stack.Screen;
 
 const MainNavigation = () => {
   const { token } = useUserContext();
-  const isLoggedIn = Boolean("token");
+  const isLoggedIn = Boolean(token);
   return (
     <Navigator>
       {isLoggedIn ? (

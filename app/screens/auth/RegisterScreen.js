@@ -65,7 +65,7 @@ const RegisterScreen = ({ navigation }) => {
               navigation.navigate(routes.LOGIN_SCREEN);
             }}
           >
-            <Text style={{ color: colors.primary }}>Login</Text>
+            <Text style={{ color: colors.medium }}>Login</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -84,5 +84,6 @@ const styles = StyleSheet.create({
   },
   form: {
     width: "90%",
+    paddingTop: 20,
   },
 });
