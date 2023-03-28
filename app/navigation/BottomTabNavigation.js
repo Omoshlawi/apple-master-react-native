@@ -16,7 +16,7 @@ function BottomTabNavigation() {
       screenOptions={{
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.medium,
-        headerShown: false
+        headerShown: false,
       }}
     >
       <Screen
@@ -53,7 +53,9 @@ function BottomTabNavigation() {
         component={AccountScreen}
         name={routes.ACCOUNT_SCREEN}
         options={{
+          title: "User Center",
           tabBarLabel: "Account",
+          headerShown: true,
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="account" color={color} size={size} />
           ),
