@@ -4,8 +4,9 @@ import AppSafeArea from "../../components/AppSafeArea";
 import ListItem from "../../components/ListItem";
 import { useUserContext } from "../../context/hooks";
 import { useUser } from "../../api/hooks";
+import routes from "../../navigation/routes";
 
-const AccountScreen = () => {
+const AccountScreen = ({ navigation }) => {
   const { user } = useUserContext();
   const { getUser } = useUser();
   useEffect(() => {
@@ -21,6 +22,12 @@ const AccountScreen = () => {
           title={`${user.first_name} ${user.last_name}`}
           subTitle={user.email}
           icon="account"
+          onPress={() =>
+            navigation.navigate(routes.USER_NAVIGATION, {
+              screen: routes.PROFILE_SCREEN,
+              params: user,
+            })
+          }
         />
       )}
     </AppSafeArea>

@@ -1,8 +1,8 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import colors from "../utils/colors";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Avatar } from "react-native-paper";
+import { Avatar, Text } from "react-native-paper";
 
 const ListItem = ({ image, icon, title, subTitle, onPress }) => {
   return (
@@ -14,8 +14,10 @@ const ListItem = ({ image, icon, title, subTitle, onPress }) => {
       )}
 
       <View style={styles.content}>
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.subTitle}>{subTitle}</Text>
+        <Text variant="titleLarge">{title}</Text>
+        <Text style={styles.subTitle} variant="bodyLarge">
+          {subTitle}
+        </Text>
       </View>
     </TouchableOpacity>
   );

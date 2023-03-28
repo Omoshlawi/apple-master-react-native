@@ -8,4 +8,6 @@ export default Object.freeze({
   ACCOUNT_SCREEN: "Account Screen",
   CART_SCREEN: "Cart Screen",
   SEARCH_SCREEN: "Seach Screen",
+  PROFILE_SCREEN: "Profile Screen",
+  USER_NAVIGATION: "User nav",
 });

@@ -4,6 +4,7 @@ import RegisterScreen from "../screens/auth/RegisterScreen";
 import AuthNavigation from "./AuthNavigation";
 import BottomTabNavigation from "./BottomTabNavigation";
 import routes from "./routes";
+import UserNavigation from "./UserNavigation";
 
 const Stack = createStackNavigator();
 
@@ -32,6 +33,11 @@ const MainNavigation = () => {
         name={routes.REGISTER_SCREEN}
         component={RegisterScreen}
         options={{ headerTitle: "Register" }}
+      />
+      <Screen
+        name={routes.USER_NAVIGATION}
+        component={UserNavigation}
+        options={{ headerShown: false }}
       />
     </Navigator>
   );
