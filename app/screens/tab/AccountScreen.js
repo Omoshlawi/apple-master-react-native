@@ -5,6 +5,8 @@ import ListItem from "../../components/ListItem";
 import { useUserContext } from "../../context/hooks";
 import { useUser } from "../../api/hooks";
 import routes from "../../navigation/routes";
+import { Avatar, Card, IconButton } from "react-native-paper";
+import colors from "../../utils/colors";
 
 const AccountScreen = ({ navigation }) => {
   const { user } = useUserContext();
@@ -18,7 +20,7 @@ const AccountScreen = ({ navigation }) => {
     <AppSafeArea>
       {user && (
         <ListItem
-          image={require("../../assets/logo-black.png")}
+          image={user.profile.image ? { uri: user.profile.image } : null}
           title={`${user.first_name} ${user.last_name}`}
           subTitle={user.email}
           icon="account"
@@ -30,10 +32,63 @@ const AccountScreen = ({ navigation }) => {
           }
         />
       )}
+
+      <Card.Title
+        style={styles.listItem}
+        subtitle="Order History"
+        subtitleVariant="bodyLarge"
+        left={(props) => (
+          <Avatar.Icon style={styles.icon} {...props} icon="history" />
+        )}
+        right={(props) => (
+          <IconButton {...props} icon="chevron-right" onPress={() => {}} />
+        )}
+      />
+      <Card.Title
+        style={styles.listItem}
+        subtitle="Payment"
+        subtitleVariant="bodyLarge"
+        left={(props) => (
+          <Avatar.Icon style={styles.icon} {...props} icon="wallet" />
+        )}
+        right={(props) => (
+          <IconButton {...props} icon="chevron-right" onPress={() => {}} />
+        )}
+      />
+      <Card.Title
+        style={styles.listItem}
+        subtitle="Transactions"
+        subtitleVariant="bodyLarge"
+        left={(props) => (
+          <Avatar.Icon style={styles.icon} {...props} icon="bank" />
+        )}
+        right={(props) => (
+          <IconButton {...props} icon="chevron-right" onPress={() => {}} />
+        )}
+      />
+      <Card.Title
+        style={styles.listItem}
+        subtitle="Logout"
+        subtitleVariant="bodyLarge"
+        left={(props) => (
+          <Avatar.Icon style={styles.icon} {...props} icon="logout" />
+        )}
+        right={(props) => (
+          <IconButton {...props} icon="chevron-right" onPress={() => {}} />
+        )}
+      />
     </AppSafeArea>
   );
 };
 
 export default AccountScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  listItem: {
+    backgroundColor: colors.white,
+    marginTop: 10,
+  },
+  icon: {
+    backgroundColor: colors.light,
+  },
+});
