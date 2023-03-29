@@ -1,5 +1,8 @@
 import { createStackNavigator } from "@react-navigation/stack";
+import OrdersScreen from "../screens/user/OrdersScreen";
+import PaymentsScreen from "../screens/user/PaymentsScreen";
 import ProfileScreen from "../screens/user/ProfileScreen";
+import TransactionsScreen from "../screens/user/TransactionsScreen";
 import routes from "./routes";
 
 const Stack = createStackNavigator();
@@ -14,6 +17,21 @@ const UserNavigation = () => {
         name={routes.PROFILE_SCREEN}
         component={ProfileScreen}
         options={{ title: "Profile" }}
+      />
+      <Screen
+        name={routes.TRANSACTIONS_SCREEN}
+        component={TransactionsScreen}
+        options={{ title: "Transactions" }}
+      />
+      <Screen
+        name={routes.PAYMENTS_SCREEN}
+        component={PaymentsScreen}
+        options={{ title: "Payments" }}
+      />
+      <Screen
+        name={routes.ORDERS_SCREEN}
+        component={OrdersScreen}
+        options={{ title: "Orders" }}
       />
     </Navigator>
   );

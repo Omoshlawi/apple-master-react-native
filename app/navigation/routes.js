@@ -10,4 +10,7 @@ export default Object.freeze({
   SEARCH_SCREEN: "Seach Screen",
   PROFILE_SCREEN: "Profile Screen",
   USER_NAVIGATION: "User nav",
+  ORDERS_SCREEN: "Order Screen",
+  TRANSACTIONS_SCREEN: "Transactions Screen",
+  PAYMENTS_SCREEN: "Payments Screen",
 });
