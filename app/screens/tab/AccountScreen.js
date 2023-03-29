@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React, { useEffect } from "react";
 import AppSafeArea from "../../components/AppSafeArea";
 import ListItem from "../../components/ListItem";
@@ -10,7 +10,7 @@ import colors from "../../utils/colors";
 
 const AccountScreen = ({ navigation }) => {
   const { user } = useUserContext();
-  const { getUser } = useUser();
+  const { getUser, logout } = useUser();
   useEffect(() => {
     if (!user) {
       getUser();
@@ -32,51 +32,65 @@ const AccountScreen = ({ navigation }) => {
           }
         />
       )}
-
-      <Card.Title
-        style={styles.listItem}
-        subtitle="Order History"
-        subtitleVariant="bodyLarge"
-        left={(props) => (
-          <Avatar.Icon style={styles.icon} {...props} icon="history" />
-        )}
-        right={(props) => (
-          <IconButton {...props} icon="chevron-right" onPress={() => {}} />
-        )}
-      />
-      <Card.Title
-        style={styles.listItem}
-        subtitle="Payment"
-        subtitleVariant="bodyLarge"
-        left={(props) => (
-          <Avatar.Icon style={styles.icon} {...props} icon="wallet" />
-        )}
-        right={(props) => (
-          <IconButton {...props} icon="chevron-right" onPress={() => {}} />
-        )}
-      />
-      <Card.Title
-        style={styles.listItem}
-        subtitle="Transactions"
-        subtitleVariant="bodyLarge"
-        left={(props) => (
-          <Avatar.Icon style={styles.icon} {...props} icon="bank" />
-        )}
-        right={(props) => (
-          <IconButton {...props} icon="chevron-right" onPress={() => {}} />
-        )}
-      />
-      <Card.Title
-        style={styles.listItem}
-        subtitle="Logout"
-        subtitleVariant="bodyLarge"
-        left={(props) => (
-          <Avatar.Icon style={styles.icon} {...props} icon="logout" />
-        )}
-        right={(props) => (
-          <IconButton {...props} icon="chevron-right" onPress={() => {}} />
-        )}
-      />
+      <TouchableOpacity>
+        <Card.Title
+          style={styles.listItem}
+          subtitle="Order History"
+          subtitleVariant="bodyLarge"
+          left={(props) => (
+            <Avatar.Icon style={styles.icon} {...props} icon="history" />
+          )}
+          right={(props) => (
+            <IconButton {...props} icon="chevron-right" disabled />
+          )}
+        />
+      </TouchableOpacity>
+      <TouchableOpacity>
+        <Card.Title
+          style={styles.listItem}
+          subtitle="Payment"
+          subtitleVariant="bodyLarge"
+          left={(props) => (
+            <Avatar.Icon style={styles.icon} {...props} icon="wallet" />
+          )}
+          right={(props) => (
+            <IconButton {...props} icon="chevron-right" disabled />
+          )}
+        />
+      </TouchableOpacity>
+      <TouchableOpacity>
+        <Card.Title
+          style={styles.listItem}
+          subtitle="Transactions"
+          subtitleVariant="bodyLarge"
+          left={(props) => (
+            <Avatar.Icon style={styles.icon} {...props} icon="bank" />
+          )}
+          right={(props) => (
+            <IconButton {...props} icon="chevron-right" disabled />
+          )}
+        />
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          Alert.alert("Logout", "Are you sure you want to sign out", [
+            { text: "Logout", onPress: logout },
+            { text: "Cancel" },
+          ]);
+        }}
+      >
+        <Card.Title
+          style={styles.listItem}
+          subtitle="Logout"
+          subtitleVariant="bodyLarge"
+          left={(props) => (
+            <Avatar.Icon style={styles.icon} {...props} icon="logout" />
+          )}
+          right={(props) => (
+            <IconButton {...props} icon="chevron-right" disabled />
+          )}
+        />
+      </TouchableOpacity>
     </AppSafeArea>
   );
 };
