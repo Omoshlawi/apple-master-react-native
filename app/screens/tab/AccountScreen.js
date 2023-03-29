@@ -32,7 +32,13 @@ const AccountScreen = ({ navigation }) => {
           }
         />
       )}
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate(routes.USER_NAVIGATION, {
+            screen: routes.ORDERS_SCREEN,
+          })
+        }
+      >
         <Card.Title
           style={styles.listItem}
           subtitle="Order History"
@@ -45,7 +51,13 @@ const AccountScreen = ({ navigation }) => {
           )}
         />
       </TouchableOpacity>
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate(routes.USER_NAVIGATION, {
+            screen: routes.PAYMENTS_SCREEN,
+          })
+        }
+      >
         <Card.Title
           style={styles.listItem}
           subtitle="Payment"
@@ -58,7 +70,13 @@ const AccountScreen = ({ navigation }) => {
           )}
         />
       </TouchableOpacity>
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate(routes.USER_NAVIGATION, {
+            screen: routes.TRANSACTIONS_SCREEN,
+          })
+        }
+      >
         <Card.Title
           style={styles.listItem}
           subtitle="Transactions"

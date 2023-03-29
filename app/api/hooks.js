@@ -30,5 +30,7 @@ export const useUser = () => {
         "Content-Type": "multipart/form-data",
       },
     });
-  return { login, logout, getUser, register, putUser };
+  const getOrders = (token, params) =>
+    apiClient.get("orders/", params, { headers: getAuthHeader(token) });
+  return { login, logout, getUser, register, putUser, getOrders };
 };
