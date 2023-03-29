@@ -6,7 +6,14 @@ import DropDownPicker from "react-native-dropdown-picker";
 
 // https://hossein-zare.github.io/react-native-dropdown-picker-website/
 
-const DropDown = ({ placeholder, icon, value, setValue, data, setData }) => {
+const DropDown = ({
+  placeholder,
+  icon,
+  value,
+  setValue,
+  data = [],
+  setData,
+}) => {
   const [open, setOpen] = useState(false);
 
   //   return console.log(data, setData, value);
@@ -61,6 +68,7 @@ const styles = StyleSheet.create({
   },
   input: {
     paddingHorizontal: 10,
+    paddingVertical: 0,
     flex: 1,
   },
 });

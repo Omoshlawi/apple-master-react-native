@@ -12,7 +12,6 @@ import {
 } from "react-native";
 import colors from "../../utils/colors";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import ListItemSeparator from "../ListItemSeparator";
 
 /**
  *
@@ -83,7 +82,7 @@ function Picker({
                 }}
                 keyExtractor={keyExtractor}
                 data={data}
-                ItemSeparatorComponent={ListItemSeparator}
+                // ItemSeparatorComponent={ListItemSeparator}
               />
             ) : (
               <ScrollView>
@@ -114,9 +113,9 @@ function Picker({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.light,
+    backgroundColor: colors.white,
     borderRadius: 25,
-    padding: 15,
+    padding: 10,
     flexDirection: "row",
     marginVertical: 10,
   },

@@ -9,6 +9,7 @@ const TextInputField = ({
   value,
   onChangeText,
   keyboardType,
+  ...otherProps
 }) => {
   return (
     <View style={styles.container}>
@@ -22,6 +23,7 @@ const TextInputField = ({
         value={value}
         onChangeText={onChangeText}
         keyboardType={keyboardType}
+        {...otherProps}
       />
     </View>
   );
