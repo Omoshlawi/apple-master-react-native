@@ -1,36 +1,42 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useUserContext } from "../../context/hooks";
 import { useUser } from "../../api/hooks";
-import { Checkbox, DataTable, IconButton } from "react-native-paper";
+import {
+  Checkbox,
+  DataTable,
+  IconButton,
+  List,
+  Text,
+} from "react-native-paper";
+import moment from "moment/moment";
+import QuanterSizer from "../../components/input/QuanterSizer";
+import colors from "../../utils/colors";
 
 const Header = DataTable.Header;
 const Title = DataTable.Title;
 const Row = DataTable.Row;
 const Cell = DataTable.Cell;
-const Pagination = DataTable.Pagination;
-
-const numberOfItemsPerPageList = [2, 3, 4];
 
 const OrdersScreen = () => {
   const { token } = useUserContext();
   const { getOrders } = useUser();
   const [orders, setOrders] = useState([]);
-  const [page, setPage] = useState(0);
   const [selected, setSelected] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
 
-  const [numberOfItemsPerPage, onItemsPerPageChange] = useState(
-    numberOfItemsPerPageList[0]
-  );
-  const from = page * numberOfItemsPerPage;
-  const to = Math.min((page + 1) * numberOfItemsPerPage, orders.length);
+  const [visible, setVisible] = useState(false);
+  const openMenu = (menu) => {
+    console.log(menu);
+    setCurMenu(menu);
+    setVisible(true);
+  };
+  const closeMenu = () => setVisible(false);
 
-  React.useEffect(() => {
-    setPage(0);
-  }, [numberOfItemsPerPage]);
+  const [currMenu, setCurMenu] = useState();
 
   const handleFetch = async () => {
-    const response = await getOrders(token, { page_size: 100 });
+    const response = await getOrders(token, { page_size: q });
     if (!response.ok) {
       return console.log("OrderScreen: ", response.problem, response.data);
     }
@@ -39,15 +45,21 @@ const OrdersScreen = () => {
     } = response;
     setOrders(results);
   };
+  const [q, setq] = useState(0);
 
   useEffect(() => {
     handleFetch();
-  }, []);
+  }, [q]);
   return (
     <View>
       <DataTable>
         <Header>
-          <Title></Title>
+          <Title>
+            <Checkbox
+              status={selectAll ? "checked" : "unchecked"}
+              onPress={() => setSelectAll(!selectAll)}
+            />
+          </Title>
           <Title>#</Title>
           <Title>Created</Title>
           <Title>Items Count</Title>
@@ -67,7 +79,9 @@ const OrdersScreen = () => {
               <Cell>
                 <Checkbox
                   status={
-                    selected.indexOf(index) !== -1 ? "checked" : "unchecked"
+                    selectAll || selected.indexOf(index) !== -1
+                      ? "checked"
+                      : "unchecked"
                   }
                   onPress={() => {
                     selected.indexOf(index) !== -1
@@ -76,31 +90,46 @@ const OrdersScreen = () => {
                   }}
                 />
               </Cell>
-              <Cell>{index}</Cell>
-              <Cell>{updated}</Cell>
+              <Cell>{index + 1}</Cell>
+              <Cell>{moment(updated).format("Do MMM YYYY")}</Cell>
               <Cell>{items.length}</Cell>
               <Cell>{total_cost}</Cell>
               <Cell>{amount_paid}</Cell>
               <Cell>{balance}</Cell>
-              <Cell>{"" + paid}</Cell>
               <Cell>
-                <IconButton icon="dots-vertical" onPress={() => {}} />
+                {paid ? (
+                  <List.Icon icon="check-circle" color="green" />
+                ) : (
+                  <List.Icon icon="close-circle" color="red" />
+                )}
+              </Cell>
+              <Cell>
+                <IconButton
+                  icon="dots-vertical"
+                  onPress={() => {
+                    openMenu(index);
+                  }}
+                />
               </Cell>
             </Row>
           )
         )}
 
-        <Pagination
-          page={page}
-          numberOfPages={Math.ceil(orders.length / numberOfItemsPerPage)}
-          onPageChange={(page) => setPage(page)}
-          label={`${from + 1}-${to} of ${orders.length}`}
-          //   showFastPaginationControls
-          //   numberOfItemsPerPageList={numberOfItemsPerPageList}
-          numberOfItemsPerPage={numberOfItemsPerPage}
-          onItemsPerPageChange={onItemsPerPageChange}
-          //   selectPageDropdownLabel={"Rows per page"}
-        />
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "flex-end",
+            padding: 10,
+          }}
+        >
+          <Text>Rows per page</Text>
+          <QuanterSizer
+            value={q}
+            onIncrement={() => setq(q + 1)}
+            onDecrement={() => setq(q - 1)}
+          />
+        </View>
       </DataTable>
     </View>
   );
