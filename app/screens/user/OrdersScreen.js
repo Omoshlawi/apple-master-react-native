@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useUserContext } from "../../context/hooks";
 import { useUser } from "../../api/hooks";
@@ -12,26 +12,19 @@ import {
 import moment from "moment/moment";
 import QuanterSizer from "../../components/input/QuanterSizer";
 import colors from "../../utils/colors";
+import routes from "../../navigation/routes";
 
 const Header = DataTable.Header;
 const Title = DataTable.Title;
 const Row = DataTable.Row;
 const Cell = DataTable.Cell;
 
-const OrdersScreen = () => {
+const OrdersScreen = ({ navigation }) => {
   const { token } = useUserContext();
   const { getOrders } = useUser();
   const [orders, setOrders] = useState([]);
   const [selected, setSelected] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
-
-  const [visible, setVisible] = useState(false);
-  const openMenu = (menu) => {
-    console.log(menu);
-    setCurMenu(menu);
-    setVisible(true);
-  };
-  const closeMenu = () => setVisible(false);
 
   const [currMenu, setCurMenu] = useState();
 
@@ -61,59 +54,56 @@ const OrdersScreen = () => {
             />
           </Title>
           <Title>#</Title>
+          <Title>Order</Title>
           <Title>Created</Title>
           <Title>Items Count</Title>
           <Title>Total Cost</Title>
           <Title>Amount Paid</Title>
           <Title>Balance</Title>
           <Title>Status</Title>
-          <Title>Actions</Title>
         </Header>
 
-        {orders.map(
-          (
-            { updated, items, total_cost, amount_paid, balance, paid },
-            index
-          ) => (
-            <Row key={index}>
-              <Cell>
-                <Checkbox
-                  status={
-                    selectAll || selected.indexOf(index) !== -1
-                      ? "checked"
-                      : "unchecked"
-                  }
-                  onPress={() => {
-                    selected.indexOf(index) !== -1
-                      ? setSelected(selected.filter((ind) => ind !== index))
-                      : setSelected([...selected, index]);
-                  }}
-                />
-              </Cell>
-              <Cell>{index + 1}</Cell>
-              <Cell>{moment(updated).format("Do MMM YYYY")}</Cell>
-              <Cell>{items.length}</Cell>
-              <Cell>{total_cost}</Cell>
-              <Cell>{amount_paid}</Cell>
-              <Cell>{balance}</Cell>
-              <Cell>
-                {paid ? (
-                  <List.Icon icon="check-circle" color="green" />
-                ) : (
-                  <List.Icon icon="close-circle" color="red" />
-                )}
-              </Cell>
-              <Cell>
-                <IconButton
-                  icon="dots-vertical"
-                  onPress={() => {
-                    openMenu(index);
-                  }}
-                />
-              </Cell>
-            </Row>
-          )
-        )}
+        {orders.map((order, index) => {
+          const {order_id, updated, items, total_cost, amount_paid, balance, paid } =
+            order;
+          return (
+            <TouchableOpacity
+              key={index}
+              onPress={() => navigation.navigate(routes.ORDER_SCREEN, order)}
+            >
+              <Row>
+                <Cell>
+                  <Checkbox
+                    status={
+                      selectAll || selected.indexOf(index) !== -1
+                        ? "checked"
+                        : "unchecked"
+                    }
+                    onPress={() => {
+                      selected.indexOf(index) !== -1
+                        ? setSelected(selected.filter((ind) => ind !== index))
+                        : setSelected([...selected, index]);
+                    }}
+                  />
+                </Cell>
+                <Cell>{index + 1}</Cell>
+                <Cell>{order_id}</Cell>
+                <Cell>{moment(updated).format("Do MMM YYYY")}</Cell>
+                <Cell>{items.length}</Cell>
+                <Cell>{total_cost}</Cell>
+                <Cell>{amount_paid}</Cell>
+                <Cell>{balance}</Cell>
+                <Cell>
+                  {paid ? (
+                    <List.Icon icon="check-circle" color="green" />
+                  ) : (
+                    <List.Icon icon="close-circle" color="red" />
+                  )}
+                </Cell>
+              </Row>
+            </TouchableOpacity>
+          );
+        })}
 
         <View
           style={{

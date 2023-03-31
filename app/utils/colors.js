@@ -7,4 +7,6 @@ export default {
   black: "#000",
   dark: "#545454",
   back1: "#000000dd",
+  success: "green",
+  danger: "red",
 };
