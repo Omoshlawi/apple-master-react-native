@@ -5,13 +5,11 @@ import { useUser } from "../../api/hooks";
 import {
   Checkbox,
   DataTable,
-  IconButton,
   List,
   Text,
 } from "react-native-paper";
 import moment from "moment/moment";
 import QuanterSizer from "../../components/input/QuanterSizer";
-import colors from "../../utils/colors";
 import routes from "../../navigation/routes";
 
 const Header = DataTable.Header;
@@ -64,8 +62,15 @@ const OrdersScreen = ({ navigation }) => {
         </Header>
 
         {orders.map((order, index) => {
-          const {order_id, updated, items, total_cost, amount_paid, balance, paid } =
-            order;
+          const {
+            order_id,
+            updated,
+            items,
+            total_cost,
+            amount_paid,
+            balance,
+            paid,
+          } = order;
           return (
             <TouchableOpacity
               key={index}

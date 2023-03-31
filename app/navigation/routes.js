@@ -14,4 +14,5 @@ export default Object.freeze({
   ORDER_SCREEN: "Order Screen",
   TRANSACTIONS_SCREEN: "Transactions Screen",
   PAYMENTS_SCREEN: "Payments Screen",
+  PAYMENT_SCREEN: "Payment Screen",
 });
