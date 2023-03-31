@@ -81,7 +81,7 @@ const OrderDetailScreen = ({ navigation, route }) => {
                   <View
                     style={[
                       styles.badge,
-                      paid ? { backgroundColor: colors.danger } : {},
+                      !paid ? { backgroundColor: colors.danger } : {},
                     ]}
                   >
                     <Text style={styles.badgeText}>pending</Text>
@@ -163,13 +163,7 @@ const styles = StyleSheet.create({
     color: colors.medium,
   },
   badge: {
-    borderRadius: 10,
-    overflow: "hidden",
+    borderRadius: 5,
     padding: 5,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  badgeText: {
-    verticalAlign: "middle",
   },
 });
