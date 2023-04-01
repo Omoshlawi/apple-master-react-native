@@ -127,7 +127,10 @@ const HomeScreen = ({ navigation }) => {
                   });
                 }}
                 style={[
-                  { width: itemWidth, /*height: itemHeight,*/ margin: 5 },
+                  {
+                    width: itemWidth,
+                    /*height: itemHeight,*/ margin: 5,
+                  },
                 ]}
               >
                 <Card.Content>
