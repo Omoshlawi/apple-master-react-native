@@ -24,9 +24,12 @@ const OrdersScreen = ({ navigation }) => {
   const { token } = useUserContext();
   const { getOrders } = useUser();
   const [orders, setOrders] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   const handleFetch = async () => {
+    setRefreshing(true);
     const response = await getOrders(token, { page_size: 100 });
+    setRefreshing(false);
     if (!response.ok) {
       return console.log("OrderScreen: ", response.problem, response.data);
     }
@@ -43,6 +46,8 @@ const OrdersScreen = ({ navigation }) => {
     <View>
       <FlatList
         data={orders}
+        refreshing={refreshing}
+        onRefresh={handleFetch}
         keyExtractor={({ url }) => url}
         renderItem={({ item }) => {
           const {

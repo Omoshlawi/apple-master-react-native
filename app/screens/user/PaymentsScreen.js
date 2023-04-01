@@ -11,9 +11,12 @@ const PaymentsScreen = ({ navigation }) => {
   const [payments, setPayments] = useState();
   const { getPayments } = useUser();
   const { token } = useUserContext();
+  const [refreshing, setRefreshing] = useState(false);
 
   const handleFetch = async () => {
+    setRefreshing(true);
     const response = await getPayments(token, { page_size: 100 });
+    setRefreshing(false);
     if (!response.ok) {
       return console.log("OrderScreen: ", response.problem, response.data);
     }
@@ -31,6 +34,8 @@ const PaymentsScreen = ({ navigation }) => {
       <FlatList
         data={payments}
         keyExtractor={({ url }) => url}
+        refreshing={refreshing}
+        onRefresh={handleFetch}
         renderItem={({ item }) => {
           const {
             url,
