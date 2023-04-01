@@ -69,7 +69,6 @@ const HomeScreen = () => {
       </View>
       <ScrollableIconButtons
         title="Product Categories"
-        
         data={categories}
         imageExtractor={({ image }) => image}
         keyExtractor={({ url }) => url}
@@ -90,7 +89,7 @@ const styles = StyleSheet.create({
   headerontainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
   },
   searchButn: {
     backgroundColor: colors.primary,

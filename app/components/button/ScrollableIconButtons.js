@@ -32,7 +32,7 @@ const ScrollableImageButtons = ({
     }
   }, [currentIndex]);
   return (
-    <View style={[styles.container, contentContainerStyle]}>
+    <View style={contentContainerStyle}>
       <View style={styles.header}>
         <Text style={styles.title}>{title}</Text>
         <List.Icon icon="chevron-right" />
@@ -65,9 +65,6 @@ const ScrollableImageButtons = ({
 export default ScrollableImageButtons;
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 10,
-  },
   listItem: {
     margin: 5,
     backgroundColor: colors.white,
@@ -81,5 +78,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    backgroundColor: colors.white,
+    borderRadius: 5,
+    paddingHorizontal: 10,
   },
 });
