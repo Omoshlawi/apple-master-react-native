@@ -1,8 +1,10 @@
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useUserContext } from "../../context/hooks";
 import { useUser } from "../../api/hooks";
 import {
+  Avatar,
+  Card,
   Checkbox,
   DataTable,
   List,
@@ -11,6 +13,7 @@ import {
 import moment from "moment/moment";
 import QuanterSizer from "../../components/input/QuanterSizer";
 import routes from "../../navigation/routes";
+import colors from "../../utils/colors";
 
 const Header = DataTable.Header;
 const Title = DataTable.Title;
@@ -21,13 +24,9 @@ const OrdersScreen = ({ navigation }) => {
   const { token } = useUserContext();
   const { getOrders } = useUser();
   const [orders, setOrders] = useState([]);
-  const [selected, setSelected] = useState([]);
-  const [selectAll, setSelectAll] = useState(false);
-
-  const [currMenu, setCurMenu] = useState();
 
   const handleFetch = async () => {
-    const response = await getOrders(token, { page_size: q });
+    const response = await getOrders(token, { page_size: 100 });
     if (!response.ok) {
       return console.log("OrderScreen: ", response.problem, response.data);
     }
@@ -36,32 +35,16 @@ const OrdersScreen = ({ navigation }) => {
     } = response;
     setOrders(results);
   };
-  const [q, setq] = useState(0);
 
   useEffect(() => {
     handleFetch();
-  }, [q]);
+  }, []);
   return (
     <View>
-      <DataTable>
-        <Header>
-          <Title>
-            <Checkbox
-              status={selectAll ? "checked" : "unchecked"}
-              onPress={() => setSelectAll(!selectAll)}
-            />
-          </Title>
-          <Title>#</Title>
-          <Title>Order</Title>
-          <Title>Created</Title>
-          <Title>Items Count</Title>
-          <Title>Total Cost</Title>
-          <Title>Amount Paid</Title>
-          <Title>Balance</Title>
-          <Title>Status</Title>
-        </Header>
-
-        {orders.map((order, index) => {
+      <FlatList
+        data={orders}
+        keyExtractor={({ url }) => url}
+        renderItem={({ item }) => {
           const {
             order_id,
             updated,
@@ -70,66 +53,53 @@ const OrdersScreen = ({ navigation }) => {
             amount_paid,
             balance,
             paid,
-          } = order;
+          } = item;
           return (
             <TouchableOpacity
-              key={index}
-              onPress={() => navigation.navigate(routes.ORDER_SCREEN, order)}
+              onPress={() => navigation.navigate(routes.ORDER_SCREEN, item)}
             >
-              <Row>
-                <Cell>
-                  <Checkbox
-                    status={
-                      selectAll || selected.indexOf(index) !== -1
-                        ? "checked"
-                        : "unchecked"
-                    }
-                    onPress={() => {
-                      selected.indexOf(index) !== -1
-                        ? setSelected(selected.filter((ind) => ind !== index))
-                        : setSelected([...selected, index]);
-                    }}
+              <Card.Title
+                style={styles.orderCard}
+                title={order_id}
+                subtitle={moment(updated).format("Do MMM YYYY, h:mm a")}
+                subtitleVariant="bodySmall"
+                subtitleStyle={{ color: colors.medium }}
+                left={(props) => (
+                  <Avatar.Icon
+                    icon="shopping"
+                    {...props}
+                    style={{ backgroundColor: colors.light }}
+                    color={paid ? colors.success : colors.danger}
                   />
-                </Cell>
-                <Cell>{index + 1}</Cell>
-                <Cell>{order_id}</Cell>
-                <Cell>{moment(updated).format("Do MMM YYYY")}</Cell>
-                <Cell>{items.length}</Cell>
-                <Cell>{total_cost}</Cell>
-                <Cell>{amount_paid}</Cell>
-                <Cell>{balance}</Cell>
-                <Cell>
-                  {paid ? (
-                    <List.Icon icon="check-circle" color="green" />
-                  ) : (
-                    <List.Icon icon="close-circle" color="red" />
-                  )}
-                </Cell>
-              </Row>
+                )}
+                right={(props) => (
+                  <Text
+                    {...props}
+                    style={{
+                      paddingHorizontal: 10,
+                      fontWeight: "bold",
+                      color: colors.medium,
+                    }}
+                  >
+                    Ksh. {total_cost}
+                  </Text>
+                )}
+              />
             </TouchableOpacity>
           );
-        })}
-
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "flex-end",
-            padding: 10,
-          }}
-        >
-          <Text>Rows per page</Text>
-          <QuanterSizer
-            value={q}
-            onIncrement={() => setq(q + 1)}
-            onDecrement={() => setq(q - 1)}
-          />
-        </View>
-      </DataTable>
+        }}
+      />
     </View>
   );
 };
 
 export default OrdersScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  orderCard: {
+    backgroundColor: colors.white,
+    marginHorizontal: 5,
+    marginTop: 5,
+    borderRadius: 20,
+  },
+});
