@@ -36,3 +36,11 @@ export const useUser = () => {
     apiClient.get("payments/", params, { headers: getAuthHeader(token) });
   return { login, logout, getUser, register, putUser, getOrders, getPayments };
 };
+
+export const useShop = () => {
+  const endPoint = "shop/";
+  const getCategories = (params) =>
+    apiClient.get(`${endPoint}categories/`, params);
+  const getProducts = (params) => apiClient.get(endPoint, params);
+  return { getProducts, getCategories };
+};
