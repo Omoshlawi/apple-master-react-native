@@ -5,8 +5,9 @@ import { useUserContext } from "../../context/hooks";
 import { Avatar, Card, List, Text } from "react-native-paper";
 import colors from "../../utils/colors";
 import moment from "moment";
+import routes from "../../navigation/routes";
 
-const PaymentsScreen = () => {
+const PaymentsScreen = ({ navigation }) => {
   const [payments, setPayments] = useState();
   const { getPayments } = useUser();
   const { token } = useUserContext();
@@ -43,16 +44,23 @@ const PaymentsScreen = () => {
             order: { order },
           } = item;
           return (
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigation.navigate(routes.PAYMENT_SCREEN, item)}
+            >
               <Card.Title
                 style={styles.card}
                 title={payment_id}
                 titleVariant="bodyLarge"
                 subtitleVariant="bodySmall"
-                subtitle={moment(created).format("Do MMM YYYY")}
+                subtitle={moment(created).format("Do MMM YYYY, h:mm a")}
                 subtitleStyle={{ color: colors.medium }}
                 left={(props) => (
-                  <Avatar.Icon {...props} icon="wallet" style={styles.icon} />
+                  <Avatar.Icon
+                    {...props}
+                    icon="wallet"
+                    style={styles.icon}
+                    color={completed ? colors.success : colors.danger}
+                  />
                 )}
                 right={(props) => (
                   <Text {...props} style={styles.price} variant="bodyMedium">

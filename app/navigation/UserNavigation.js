@@ -5,6 +5,7 @@ import PaymentsScreen from "../screens/user/PaymentsScreen";
 import ProfileScreen from "../screens/user/ProfileScreen";
 import TransactionsScreen from "../screens/user/TransactionsScreen";
 import routes from "./routes";
+import PaymentDetailScreen from "../screens/user/PaymentDetailScreen";
 
 const Stack = createStackNavigator();
 
@@ -28,6 +29,13 @@ const UserNavigation = () => {
         name={routes.PAYMENTS_SCREEN}
         component={PaymentsScreen}
         options={{ title: "Payments" }}
+      />
+      <Screen
+        name={routes.PAYMENT_SCREEN}
+        component={PaymentDetailScreen}
+        options={({ route }) => ({
+          title: route.params.payment_id,
+        })}
       />
       <Screen
         name={routes.ORDERS_SCREEN}
