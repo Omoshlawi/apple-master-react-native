@@ -9,4 +9,5 @@ export default {
   back1: "#000000dd",
   success: "green",
   danger: "red",
+  transparent: "#FFFF0000",
 };

@@ -17,6 +17,7 @@ const ScrollableThumbnails = ({ uris = [], onPress }) => {
         data={uris}
         keyExtractor={(url) => url}
         horizontal
+        contentContainerStyle={{ backgroundColor: colors.transparent }}
         renderItem={({ item: uri }) => (
           <TouchableOpacity onPress={() => onPress(uri)}>
             <Image style={styles.image} source={{ uri }} resizeMode="contain" />
