@@ -61,7 +61,9 @@ const OrdersScreen = ({ navigation }) => {
               <Card.Title
                 style={styles.orderCard}
                 title={order_id}
-                subtitle={moment(updated).format("Do MMM YYYY, h:mm a")}
+                subtitle={`${moment(updated).format("Do MMM YYYY, h:mm a")} | ${
+                  items.length
+                } items`}
                 subtitleVariant="bodySmall"
                 subtitleStyle={{ color: colors.medium }}
                 left={(props) => (

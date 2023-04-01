@@ -13,129 +13,111 @@ import moment from "moment";
 import Logo from "../../components/Logo";
 
 const OrderDetailScreen = ({ navigation, route }) => {
-  const { order_id, updated, items, total_cost, amount_paid, balance, paid } =
-    route.params;
+  const {
+    order_id,
+    updated,
+    items,
+    total_cost,
+    amount_paid,
+    balance,
+    paid: completed,
+  } = route.params;
   return (
     <View>
-      <View style={styles.container}>
+      <View style={styles.logo}>
         <Logo variant="black" />
       </View>
-      <Card.Content>
-        <View style={[styles.row, { justifyContent: "space-between" }]}>
-          <View>
-            <View style={styles.row}>
-              <Text style={styles.title} variant="bodyLarge">
-                OrderId:{" "}
-              </Text>
-              <Text variant="bodyLarge">{order_id}</Text>
-            </View>
-            <View style={styles.row}>
-              <Text style={styles.title} variant="bodyLarge">
-                Created:{" "}
-              </Text>
-              <Text variant="bodyLarge">
-                {moment(updated).format("Do MMM YYYY")}
-              </Text>
-            </View>
-            <View style={styles.row}>
-              <Text style={styles.title} variant="bodyLarge">
-                Items Count:{" "}
-              </Text>
-              <Text variant="bodyLarge">{items.length}</Text>
-            </View>
-            <View style={styles.row}>
-              <Text style={styles.title} variant="bodyLarge">
-                TotalCost:{" "}
-              </Text>
-              <Text variant="bodyLarge">{total_cost}</Text>
-            </View>
+      <View style={styles.detailsRow}>
+        {/* col1 */}
+        <View>
+          <View style={styles.valuesRow}>
+            <Text>Order Id: </Text>
+            <Text style={styles.value}>{order_id}</Text>
           </View>
-          <View>
-            <View style={styles.row}>
-              <Text style={styles.title} variant="bodyLarge">
-                Ammount Paid:{" "}
-              </Text>
-              <Text variant="bodyLarge">{amount_paid}</Text>
-            </View>
-            <View style={styles.row}>
-              <Text style={styles.title} variant="bodyLarge">
-                Balance:{" "}
-              </Text>
-              <Text variant="bodyLarge">{balance}</Text>
-            </View>
-            <View style={styles.row}>
-              <Text style={styles.title} variant="bodyLarge">
-                Paid:{" "}
-              </Text>
-              <Text variant="bodyLarge">
-                {paid ? (
-                  <View
-                    style={[
-                      styles.badge,
-                      paid ? { backgroundColor: colors.success } : {},
-                    ]}
-                  >
-                    <Text style={styles.badgeText}>paid</Text>
-                  </View>
-                ) : (
-                  <View
-                    style={[
-                      styles.badge,
-                      !paid ? { backgroundColor: colors.danger } : {},
-                    ]}
-                  >
-                    <Text style={styles.badgeText}>pending</Text>
-                  </View>
-                )}
-              </Text>
-            </View>
+          <View style={styles.valuesRow}>
+            <Text>Date:</Text>
+            <Text style={styles.value}>
+              {moment(updated).format("Do MMM YYYY, h:mm a")}
+            </Text>
+          </View>
+          <View style={styles.valuesRow}>
+            <Text>Items: </Text>
+            <Text style={styles.value}>{items.length}</Text>
           </View>
         </View>
-      </Card.Content>
+        {/* Col 2 */}
+        <View>
+          <View style={styles.valuesRow}>
+            <Text>Cost: </Text>
+            <Text style={styles.value}>Ksh. {total_cost}</Text>
+          </View>
+          <View style={styles.valuesRow}>
+            <Text>Amount Paid: </Text>
+            <Text style={styles.value}>Ksh. {amount_paid}</Text>
+          </View>
 
+          <View style={styles.valuesRow}>
+            <Text>Status: </Text>
+            <Text
+              style={[
+                { borderRadius: 5, padding: 2, color: colors.white },
+                completed
+                  ? { backgroundColor: colors.success }
+                  : { backgroundColor: colors.danger },
+              ]}
+            >
+              {completed ? "paid" : "pending"}
+            </Text>
+          </View>
+        </View>
+      </View>
       <FlatList
         data={items}
         keyExtractor={({ url }) => url}
-        renderItem={(
-          {
-            item: {
-              price,
-              quantity,
-              total_cost,
-              product: { name: productName, image },
-            },
-          },
-          index
-        ) => (
-          <Card.Title
-            style={styles.card}
-            key={index}
-            title={productName}
-            titleVariant="headlineSmall"
-            subtitleStyle={{ color: colors.medium }}
-            subtitle={`${quantity} * ${price}`}
-            left={(props) =>
-              image ? (
-                <Avatar.Image source={{ uri: image }} {...props} size={50} />
-              ) : (
-                <Avatar.Icon {...props} size={50} icon="shopping" />
-              )
-            }
-            right={(props) => (
-              <Text
-                {...props}
-                style={{
-                  paddingHorizontal: 10,
-                  fontWeight: "bold",
-                  color: colors.medium,
-                }}
-                variant="bodyLarge"
-              >
-                Ksh. {total_cost}
-              </Text>
-            )}
-          />
-        )}
+        renderItem={({ item }) => {
+          const {
+            product: { name, image, category },
+            total_cost,
+            price,
+            quantity,
+          } = item;
+          return (
+            <Card.Title
+              style={styles.orderCard}
+              title={name}
+              subtitle={`${category} | ${quantity} * ${price}`}
+              subtitleStyle={{ color: colors.medium }}
+              subtitleVariant="bodySmall"
+              left={(props) =>
+                image ? (
+                  <Avatar.Image
+                    source={{ uri: image }}
+                    {...props}
+                    style={{ backgroundColor: colors.light }}
+                  />
+                ) : (
+                  <Avatar.Icon
+                    icon="shopping"
+                    {...props}
+                    style={{ backgroundColor: colors.light }}
+                    color={completed ? colors.success : colors.danger}
+                  />
+                )
+              }
+              right={(props) => (
+                <Text
+                  style={{
+                    fontWeight: "bold",
+                    color: colors.medium,
+                    paddingHorizontal: 10,
+                  }}
+                >
+                  Ksh. {total_cost}
+                </Text>
+              )}
+            />
+          );
+        }}
       />
     </View>
   );
@@ -144,26 +126,28 @@ const OrderDetailScreen = ({ navigation, route }) => {
 export default OrderDetailScreen;
 
 const styles = StyleSheet.create({
-  card: {
-    backgroundColor: colors.white,
-    marginTop: 10,
-    borderRadius: 10,
-    marginHorizontal: 5,
-  },
-  container: {
+  logo: {
     alignItems: "center",
   },
-  row: {
+  detailsRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 10,
+    backgroundColor: colors.white,
+    margin: 5,
+    borderRadius: 30,
+  },
+  valuesRow: {
     flexDirection: "row",
     padding: 5,
   },
-
-  title: {
+  value: {
     fontWeight: "bold",
-    color: colors.medium,
   },
-  badge: {
-    borderRadius: 5,
-    padding: 5,
+  orderCard: {
+    backgroundColor: colors.white,
+    marginHorizontal: 5,
+    marginTop: 5,
+    borderRadius: 20,
   },
 });

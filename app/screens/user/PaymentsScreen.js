@@ -52,7 +52,9 @@ const PaymentsScreen = ({ navigation }) => {
                 title={payment_id}
                 titleVariant="bodyLarge"
                 subtitleVariant="bodySmall"
-                subtitle={moment(created).format("Do MMM YYYY, h:mm a")}
+                subtitle={`${moment(created).format("Do MMM YYYY, h:mm a")} | ${
+                  transactions.length
+                } Transactions`}
                 subtitleStyle={{ color: colors.medium }}
                 left={(props) => (
                   <Avatar.Icon
@@ -90,7 +92,7 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: colors.white,
     marginHorizontal: 5,
-    marginTop: 10,
+    marginTop: 5,
     borderRadius: 20,
   },
 });
