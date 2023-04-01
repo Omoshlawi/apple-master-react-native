@@ -71,25 +71,6 @@ const AccountScreen = ({ navigation }) => {
         />
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() =>
-          navigation.navigate(routes.USER_NAVIGATION, {
-            screen: routes.TRANSACTIONS_SCREEN,
-          })
-        }
-      >
-        <Card.Title
-          style={styles.listItem}
-          subtitle="Transactions"
-          subtitleVariant="bodyLarge"
-          left={(props) => (
-            <Avatar.Icon style={styles.icon} {...props} icon="bank" />
-          )}
-          right={(props) => (
-            <IconButton {...props} icon="chevron-right" disabled />
-          )}
-        />
-      </TouchableOpacity>
-      <TouchableOpacity
         onPress={() => {
           Alert.alert("Logout", "Are you sure you want to sign out", [
             { text: "Logout", onPress: logout },

@@ -122,6 +122,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     padding: 10,
+    backgroundColor: colors.white,
+    margin: 5,
+    borderRadius: 30,
   },
   valuesRow: {
     flexDirection: "row",
