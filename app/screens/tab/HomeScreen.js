@@ -16,8 +16,9 @@ import colors from "../../utils/colors";
 import ScrollableIconButtons from "../../components/button/ScrollableIconButtons";
 import RatingBar from "../../components/ratingbar/RatingBar";
 import moment from "moment/moment";
+import routes from "../../navigation/routes";
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   const { getCategories, getProducts } = useShop();
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
@@ -119,6 +120,12 @@ const HomeScreen = () => {
             } = item;
             return (
               <Card
+                onPress={() => {
+                  navigation.navigate(routes.PRODUCT_NAVIGATION, {
+                    screen: routes.PRODUCT_SCREEN,
+                    params: item,
+                  });
+                }}
                 style={[
                   { width: itemWidth, /*height: itemHeight,*/ margin: 5 },
                 ]}

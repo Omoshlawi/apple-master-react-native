@@ -5,6 +5,7 @@ import AuthNavigation from "./AuthNavigation";
 import BottomTabNavigation from "./BottomTabNavigation";
 import routes from "./routes";
 import UserNavigation from "./UserNavigation";
+import ProductNavigation from "./ProductNavigation";
 
 const Stack = createStackNavigator();
 
@@ -37,6 +38,11 @@ const MainNavigation = () => {
       <Screen
         name={routes.USER_NAVIGATION}
         component={UserNavigation}
+        options={{ headerShown: false }}
+      />
+      <Screen
+        name={routes.PRODUCT_NAVIGATION}
+        component={ProductNavigation}
         options={{ headerShown: false }}
       />
     </Navigator>
