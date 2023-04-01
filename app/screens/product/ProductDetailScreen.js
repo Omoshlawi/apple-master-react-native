@@ -6,9 +6,11 @@ import colors from "../../utils/colors";
 import RatingBar from "../../components/ratingbar/RatingBar";
 import Quantorsizer from "../../components/input/Quantorsizer";
 import ExpandableText from "../../components/display/ExpandableText";
+import { useCartContext } from "../../context/hooks";
 
 const ProductDetailScreen = ({ navigation, route }) => {
   const [quantity, setQuantity] = useState(1);
+  const { addToCart } = useCartContext();
   const {
     name,
     image,
@@ -82,6 +84,9 @@ const ProductDetailScreen = ({ navigation, route }) => {
                 mode="outlined"
                 icon="cart"
                 textColor={colors.primary}
+                onPress={() =>
+                  console.log(addToCart({ product: route.params, quantity }))
+                }
               >
                 AddToCart
               </Button>

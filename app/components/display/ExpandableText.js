@@ -24,7 +24,6 @@ const ExpandableText = ({
         </Text>
       )}
       <Text style={[styles.container, contentStyle]}>{displayText}</Text>
-      {console.log(text instanceof String)}
       {text && text.length > threshHold && (
         <View style={styles.button}>
           <IconText
