@@ -12,19 +12,17 @@ import colors from "../utils/colors";
 
 const ScrollableThumbnails = ({ uris = [], onPress }) => {
   return (
-    <Card>
-      <FlatList
-        data={uris}
-        keyExtractor={(url) => url}
-        horizontal
-        contentContainerStyle={{ backgroundColor: colors.transparent }}
-        renderItem={({ item: uri }) => (
-          <TouchableOpacity onPress={() => onPress(uri)}>
-            <Image style={styles.image} source={{ uri }} resizeMode="contain" />
-          </TouchableOpacity>
-        )}
-      />
-    </Card>
+    <FlatList
+      data={uris}
+      keyExtractor={(url) => url}
+      horizontal
+      contentContainerStyle={{ backgroundColor: colors.transparent }}
+      renderItem={({ item: uri }) => (
+        <TouchableOpacity onPress={() => onPress(uri)}>
+          <Image style={styles.image} source={{ uri }} resizeMode="contain" />
+        </TouchableOpacity>
+      )}
+    />
   );
 };
 

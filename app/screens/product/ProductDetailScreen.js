@@ -5,6 +5,7 @@ import ScrollableThumbnails from "../../components/ScrollableThumbnails";
 import colors from "../../utils/colors";
 import RatingBar from "../../components/ratingbar/RatingBar";
 import Quantorsizer from "../../components/input/Quantorsizer";
+import ExpandableText from "../../components/display/ExpandableText";
 
 const ProductDetailScreen = ({ navigation, route }) => {
   const [quantity, setQuantity] = useState(1);
@@ -25,7 +26,7 @@ const ProductDetailScreen = ({ navigation, route }) => {
   return (
     <View style={styles.screen}>
       <ScrollView>
-        <Card>
+        <Card elevation={0}>
           <Card.Cover
             style={{ width: "100%", height: imageHeight }}
             source={{ uri: currHeroImage }}
@@ -34,6 +35,11 @@ const ProductDetailScreen = ({ navigation, route }) => {
           <ScrollableThumbnails
             uris={[...images.map(({ image: img }) => img), image]}
             onPress={(uri) => setcurrHeroImage(uri)}
+          />
+          <ExpandableText
+            text={description}
+            threshHold={300}
+            title="Description"
           />
         </Card>
       </ScrollView>
@@ -100,6 +106,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderRadius: 20,
     padding: 20,
+    marginTop: 10,
   },
   button: {
     padding: 10,
