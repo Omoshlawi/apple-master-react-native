@@ -1,11 +1,21 @@
-import { StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, View, Dimensions } from "react-native";
 import React, { useEffect, useState } from "react";
 import AppSafeArea from "../../components/AppSafeArea";
 import { useShop, useUser } from "../../api/hooks";
-import { Avatar, Chip, IconButton } from "react-native-paper";
+import {
+  Avatar,
+  Button,
+  Card,
+  Chip,
+  IconButton,
+  List,
+  Text,
+} from "react-native-paper";
 import { useUserContext } from "../../context/hooks";
 import colors from "../../utils/colors";
 import ScrollableIconButtons from "../../components/button/ScrollableIconButtons";
+import RatingBar from "../../components/ratingbar/RatingBar";
+import moment from "moment/moment";
 
 const HomeScreen = () => {
   const { getCategories, getProducts } = useShop();
@@ -13,6 +23,9 @@ const HomeScreen = () => {
   const [products, setProducts] = useState([]);
   const { user } = useUserContext();
   const { getUser } = useUser();
+
+  const itemWidth = Dimensions.get("window").width / 2 - 10; // subtracting margin
+  const itemHeight = Dimensions.get("window").height / 3 - 10; // subtracting margin
 
   const handleFetch = async () => {
     const categoryResponse = await getCategories();
@@ -79,6 +92,65 @@ const HomeScreen = () => {
         }}
         disabled
       />
+      <View style={styles.header}>
+        <Text style={styles.title}>Products</Text>
+        <List.Icon icon="chevron-right" />
+      </View>
+      <View style={styles.productsContainer}>
+        <FlatList
+          data={products}
+          numColumns={2}
+          keyExtractor={({ url }) => url}
+          contentContainerStyle={{
+            alignItems: "center",
+          }}
+          renderItem={({ item }) => {
+            const {
+              name,
+              image,
+              description,
+              price,
+              rating,
+              tags,
+              images,
+              updated,
+              category: { name: categry },
+              reviews: { count: reviews },
+            } = item;
+            return (
+              <Card
+                style={[
+                  { width: itemWidth, /*height: itemHeight,*/ margin: 5 },
+                ]}
+              >
+                <Card.Content>
+                  <Text variant="titleMedium">{name}</Text>
+                  <Text variant="bodyMedium" style={{ color: colors.medium }}>
+                    {categry}
+                  </Text>
+                </Card.Content>
+                <Card.Cover source={{ uri: image }} resizeMode="contain" />
+                <Card.Actions>
+                  <Text style={{ color: colors.medium }}>
+                    {`${moment(updated).format("Do MMM YYYY")} | `}
+                  </Text>
+                  <RatingBar starSize={15} defaultRating={rating} disabled />
+                  <Text>({reviews})</Text>
+                </Card.Actions>
+                <Card.Actions
+                  style={{
+                    flexDirection: "row-reverse",
+                  }}
+                >
+                  <Text variant="bodyLarge" style={{ fontWeight: "bold" }}>
+                    Ksh. {price}
+                  </Text>
+                </Card.Actions>
+              </Card>
+            );
+          }}
+        />
+      </View>
     </AppSafeArea>
   );
 };
@@ -97,5 +169,18 @@ const styles = StyleSheet.create({
   },
   categoriesContainer: {
     flexDirection: "row",
+  },
+  productsContainer: {
+    flex: 1,
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    borderRadius: 5,
+    paddingHorizontal: 10,
+  },
+  title: {
+    fontWeight: "bold",
   },
 });
