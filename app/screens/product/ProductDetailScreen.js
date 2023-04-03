@@ -84,9 +84,10 @@ const ProductDetailScreen = ({ navigation, route }) => {
                 mode="outlined"
                 icon="cart"
                 textColor={colors.primary}
-                onPress={() =>
-                  console.log(addToCart({ product: route.params, quantity }))
-                }
+                onPress={() => {
+                  addToCart({ product: route.params, quantity })
+                  navigation.goBack()
+                }}
               >
                 AddToCart
               </Button>

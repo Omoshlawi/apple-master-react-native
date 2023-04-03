@@ -10,20 +10,25 @@ export const useUserContext = () => {
 
 export const useCartContext = () => {
   const { cartItems, setCartItems } = useContext(CartContext);
-  const addToCart = ({ product: { image, product }, quantity }) => {
-    if (cartItems.findIndex((item) => item.product === product) === -1) {
+  const addToCart = ({ product, quantity }) => {
+    if (
+      cartItems.findIndex(({ product: prod }) => prod.url === product.url) ===
+      -1
+    ) {
       // New product
-      setCartItems([...cartItems, { image, product, quantity }]);
+      setCartItems([...cartItems, { product, quantity }]);
     } else {
       // update
       setCartItems([
-        ...cartItems.filter((item) => item.product !== product),
-        { image, product, quantity },
+        ...cartItems.filter(({ product: prod }) => prod.url !== product.url),
+        { product, quantity },
       ]);
     }
   };
-  const deleteFromCart = ({ product: { image, product } }) => {
-    setCartItems(cartItems.filter((item) => item.product !== product));
+  const deleteFromCart = (product) => {
+    setCartItems(
+      cartItems.filter(({ product: prod }) => prod.url !== product.url)
+    );
   };
   return { cartItems, setCartItems, addToCart, deleteFromCart };
 };

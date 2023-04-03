@@ -3,9 +3,9 @@ import React from "react";
 import { Button, IconButton, List } from "react-native-paper";
 import colors from "../../utils/colors";
 
-const QuanterSizer = ({ value = 0, onIncrement, onDecrement }) => {
+const QuanterSizer = ({ value = 0, onIncrement, onDecrement, style }) => {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       <IconButton
         style={styles.btn}
         icon="minus"
