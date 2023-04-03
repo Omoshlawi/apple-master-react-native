@@ -6,11 +6,19 @@ import colors from "../utils/colors";
 import AccountScreen from "../screens/tab/AccountScreen";
 import CartScreen from "../screens/tab/CartScreen";
 import SearchScreen from "../screens/tab/SearchScreen";
+import { View } from "react-native";
+import { Text } from "react-native-paper";
+import { useCartContext } from "../context/hooks";
 
 const Tab = createBottomTabNavigator();
 const Navigator = Tab.Navigator;
 const Screen = Tab.Screen;
 function BottomTabNavigation() {
+  const { cartItems } = useCartContext();
+  const count = cartItems.reduce(
+    (accumulator, currentValue) => accumulator + currentValue.quantity,
+    0
+  );
   return (
     <Navigator
       screenOptions={{
@@ -45,7 +53,21 @@ function BottomTabNavigation() {
         options={{
           tabBarLabel: "Cart",
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="cart" color={color} size={size} />
+            <View style={{ alignItems: "flex-end" }}>
+              {count > 0 && (
+                <Text
+                  style={{
+                    textAlign: "center",
+                    backgroundColor: colors.danger,
+                    borderRadius: 8,
+                    width: 15,
+                  }}
+                >
+                  {count}
+                </Text>
+              )}
+              <MaterialCommunityIcons name="cart" color={color} size={size} />
+            </View>
           ),
         }}
       />
