@@ -11,18 +11,18 @@ export const useUserContext = () => {
 export const useCartContext = () => {
   const { cartItems, setCartItems } = useContext(CartContext);
   const addToCart = ({ product, quantity }) => {
-    if (
-      cartItems.findIndex(({ product: prod }) => prod.url === product.url) ===
-      -1
-    ) {
+    const currentIndex = cartItems.findIndex(
+      ({ product: prod }) => prod.url === product.url
+    );
+    if (currentIndex === -1) {
       // New product
       setCartItems([...cartItems, { product, quantity }]);
     } else {
       // update
-      setCartItems([
-        ...cartItems.filter(({ product: prod }) => prod.url !== product.url),
-        { product, quantity },
-      ]);
+      const items = [...cartItems];
+      const itemToUpdate = items[currentIndex];
+      items[currentIndex] = { ...itemToUpdate, quantity };
+      setCartItems(items);
     }
   };
   const deleteFromCart = (product) => {
