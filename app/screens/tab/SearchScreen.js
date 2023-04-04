@@ -6,6 +6,7 @@ import colors from "../../utils/colors";
 import { Chip, IconButton } from "react-native-paper";
 import { useShop } from "../../api/hooks";
 import ImageButton from "../../components/button/ImageButton";
+import Product from "../../components/product/Product";
 
 const SearchScreen = () => {
   const { getTags, getProducts, getCategories } = useShop();
@@ -140,6 +141,14 @@ const SearchScreen = () => {
               active={name === activeCategory}
             />
           )}
+        />
+      </View>
+      <View>
+        <FlatList
+          data={products}
+          numColumns={2}
+          keyExtractor={({ url }) => url}
+          renderItem={({ item }) => <Product product={item} />}
         />
       </View>
     </AppSafeArea>

@@ -4,11 +4,14 @@ import { Card, Text } from "react-native-paper";
 import colors from "../../utils/colors";
 import moment from "moment";
 import RatingBar from "../ratingbar/RatingBar";
+import { useNavigation } from "@react-navigation/native";
+import routes from "../../navigation/routes";
 
 const itemWidth = Dimensions.get("window").width / 2 - 10; // subtracting margin
 const itemHeight = Dimensions.get("window").height / 3 - 10; // subtracting margin
 
-const Product = ({ product }) => {
+const Product = ({ product: item }) => {
+  const navigation = useNavigation();
   const {
     name,
     image,
@@ -20,7 +23,7 @@ const Product = ({ product }) => {
     updated,
     category: { name: categry },
     reviews: { count: reviews },
-  } = product;
+  } = item;
   return (
     <Card
       onPress={() => {
