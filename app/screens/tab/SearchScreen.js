@@ -13,9 +13,13 @@ const SearchScreen = () => {
   const [tags, setTags] = useState([]);
   const [products, setProducts] = useState([]);
   const [activeChips, setActiveChips] = useState([]);
+  const [activeCategory, setActiveCtegory] = useState();
 
   const fetchProducts = async () => {
-    const productsResponse = await getProducts({ tags: activeChips.join(",") });
+    const productsResponse = await getProducts({
+      tags: activeChips.join(","),
+      category: activeCategory,
+    });
     if (!productsResponse.ok) {
       console.log(
         "SearchScreen: ",
@@ -55,13 +59,27 @@ const SearchScreen = () => {
     }
   };
 
+  const handleCategoryClicked = (category) => {
+    /*
+    const index = activeCategory.indexOf(category);
+    if (index === -1) {
+      setActiveCtegory([...activeCategory, category]);
+    } else {
+      const cats = [...activeCategory];
+      cats.pop(index);
+      setActiveCtegory(cats);
+    }*/
+    if (activeCategory === category) setActiveCtegory(null);
+    else setActiveCtegory(category);
+  };
+
   useEffect(() => {
     handlFetch();
   }, []);
 
   useEffect(() => {
     fetchProducts();
-  }, [activeChips]);
+  }, [activeChips, activeCategory]);
 
   return (
     <AppSafeArea>
@@ -116,6 +134,10 @@ const SearchScreen = () => {
               style={styles.chip}
               image={{ uri: image }}
               title={name}
+              onPress={() => handleCategoryClicked(name)}
+              activeBackgroundColor={colors.medium}
+              activeTintColor={colors.white}
+              active={name === activeCategory}
             />
           )}
         />
