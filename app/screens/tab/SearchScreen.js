@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, TextInput, View } from "react-native";
+import { FlatList, StyleSheet, TextInput, View, Slider } from "react-native";
 import React, { useEffect, useState } from "react";
 import AppSafeArea from "../../components/AppSafeArea";
 import colors from "../../utils/colors";
@@ -6,6 +6,7 @@ import { Chip, IconButton } from "react-native-paper";
 import { useShop } from "../../api/hooks";
 import ImageButton from "../../components/button/ImageButton";
 import Product from "../../components/product/Product";
+import MultiSlider from "@ptomasroos/react-native-multi-slider";
 
 const SearchScreen = () => {
   const { getTags, getProducts, getCategories } = useShop();
@@ -15,12 +16,15 @@ const SearchScreen = () => {
   const [activeChips, setActiveChips] = useState([]);
   const [activeCategory, setActiveCtegory] = useState();
   const [searchString, setSearchString] = useState();
+  const [priceRange, setPriceRange] = useState();
 
   const fetchProducts = async () => {
     const productsResponse = await getProducts({
       tags: activeChips.join(","),
       category: activeCategory,
       search: searchString,
+      price_min: priceRange ? priceRange[0] : null,
+      price_max: priceRange ? priceRange[1] : null,
     });
     if (!productsResponse.ok) {
       console.log(
@@ -81,7 +85,7 @@ const SearchScreen = () => {
 
   useEffect(() => {
     fetchProducts();
-  }, [activeChips, activeCategory, searchString]);
+  }, [activeChips, activeCategory, searchString, priceRange]);
 
   return (
     <AppSafeArea>
@@ -147,6 +151,16 @@ const SearchScreen = () => {
               active={name === activeCategory}
             />
           )}
+        />
+        <MultiSlider
+          max={1000000}
+          min={0}
+          values={[4000, 300000]}
+          // onValuesChange={(values) => console.log(values)}
+          step={100}
+          enableLabel={true}
+          containerStyle={{ paddingHorizontal: 10 }}
+          onValuesChangeFinish={setPriceRange}
         />
       </View>
       <View>
