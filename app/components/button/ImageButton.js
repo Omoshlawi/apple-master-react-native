@@ -15,7 +15,7 @@ const ImageButton = ({
   style,
   disable = false,
   active = false,
-  activeBackgroundColor = colors.tabBackground,
+  activeBackgroundColor = colors.medium,
   activeTintColor = colors.black,
 }) => {
   return (

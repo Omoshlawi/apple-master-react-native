@@ -1,22 +1,13 @@
-import { FlatList, StyleSheet, View, Dimensions } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import AppSafeArea from "../../components/AppSafeArea";
 import { useShop, useUser } from "../../api/hooks";
-import {
-  Avatar,
-  Button,
-  Card,
-  Chip,
-  IconButton,
-  List,
-  Text,
-} from "react-native-paper";
+import { Avatar, IconButton, List, Text } from "react-native-paper";
 import { useUserContext } from "../../context/hooks";
 import colors from "../../utils/colors";
 import ScrollableIconButtons from "../../components/button/ScrollableIconButtons";
-import RatingBar from "../../components/ratingbar/RatingBar";
-import moment from "moment/moment";
 import routes from "../../navigation/routes";
+import Product from "../../components/product/Product";
 
 const HomeScreen = ({ navigation }) => {
   const { getCategories, getProducts } = useShop();
@@ -24,9 +15,6 @@ const HomeScreen = ({ navigation }) => {
   const [products, setProducts] = useState([]);
   const { user } = useUserContext();
   const { getUser } = useUser();
-
-  const itemWidth = Dimensions.get("window").width / 2 - 10; // subtracting margin
-  const itemHeight = Dimensions.get("window").height / 3 - 10; // subtracting margin
 
   const handleFetch = async () => {
     const categoryResponse = await getCategories();
@@ -108,58 +96,7 @@ const HomeScreen = ({ navigation }) => {
             alignItems: "center",
           }}
           renderItem={({ item }) => {
-            const {
-              name,
-              image,
-              description,
-              price,
-              rating,
-              tags,
-              images,
-              updated,
-              category: { name: categry },
-              reviews: { count: reviews },
-            } = item;
-            return (
-              <Card
-                onPress={() => {
-                  navigation.navigate(routes.PRODUCT_NAVIGATION, {
-                    screen: routes.PRODUCT_SCREEN,
-                    params: item,
-                  });
-                }}
-                style={[
-                  {
-                    width: itemWidth,
-                    /*height: itemHeight,*/ margin: 5,
-                  },
-                ]}
-              >
-                <Card.Content>
-                  <Text variant="titleMedium">{name}</Text>
-                  <Text variant="bodyMedium" style={{ color: colors.medium }}>
-                    {categry}
-                  </Text>
-                </Card.Content>
-                <Card.Cover source={{ uri: image }} resizeMode="contain" />
-                <Card.Actions>
-                  <Text style={{ color: colors.medium }}>
-                    {`${moment(updated).format("Do MMM YYYY")} | `}
-                  </Text>
-                  <RatingBar starSize={15} defaultRating={rating} disabled />
-                  <Text>({reviews})</Text>
-                </Card.Actions>
-                <Card.Actions
-                  style={{
-                    flexDirection: "row-reverse",
-                  }}
-                >
-                  <Text variant="bodyLarge" style={{ fontWeight: "bold" }}>
-                    Ksh. {price}
-                  </Text>
-                </Card.Actions>
-              </Card>
-            );
+            return <Product product={item} />;
           }}
         />
       </View>

@@ -5,6 +5,7 @@ import AppSafeArea from "../../components/AppSafeArea";
 import colors from "../../utils/colors";
 import { Chip, IconButton } from "react-native-paper";
 import { useShop } from "../../api/hooks";
+import ImageButton from "../../components/button/ImageButton";
 
 const SearchScreen = () => {
   const { getTags, getProducts, getCategories } = useShop();
@@ -81,7 +82,7 @@ const SearchScreen = () => {
           size={27}
         />
       </View>
-      <View>
+      <View style={styles.filters}>
         <FlatList
           data={tags}
           keyExtractor={({ name }) => name}
@@ -103,6 +104,19 @@ const SearchScreen = () => {
             >
               {name}
             </Chip>
+          )}
+        />
+        <FlatList
+          data={categories}
+          keyExtractor={({ url }) => url}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item: { name, image } }) => (
+            <ImageButton
+              style={styles.chip}
+              image={{ uri: image }}
+              title={name}
+            />
           )}
         />
       </View>
@@ -138,6 +152,9 @@ const styles = StyleSheet.create({
   },
   chip: {
     backgroundColor: colors.white,
-    margin: 2,
+    margin: 3,
+  },
+  filters: {
+    padding: 10,
   },
 });
