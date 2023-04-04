@@ -1,6 +1,5 @@
-import { FlatList, StyleSheet, Text, TextInput, View } from "react-native";
+import { FlatList, StyleSheet, TextInput, View } from "react-native";
 import React, { useEffect, useState } from "react";
-import TextInputField from "../../components/input/TextInputField";
 import AppSafeArea from "../../components/AppSafeArea";
 import colors from "../../utils/colors";
 import { Chip, IconButton } from "react-native-paper";
@@ -15,11 +14,13 @@ const SearchScreen = () => {
   const [products, setProducts] = useState([]);
   const [activeChips, setActiveChips] = useState([]);
   const [activeCategory, setActiveCtegory] = useState();
+  const [searchString, setSearchString] = useState();
 
   const fetchProducts = async () => {
     const productsResponse = await getProducts({
       tags: activeChips.join(","),
       category: activeCategory,
+      search: searchString,
     });
     if (!productsResponse.ok) {
       console.log(
@@ -80,17 +81,22 @@ const SearchScreen = () => {
 
   useEffect(() => {
     fetchProducts();
-  }, [activeChips, activeCategory]);
+  }, [activeChips, activeCategory, searchString]);
 
   return (
     <AppSafeArea>
       <View style={styles.header}>
         <View style={styles.search}>
-          <TextInput style={styles.input} placeholder="Search..." />
+          <TextInput
+            style={styles.input}
+            placeholder="Search..."
+            onChangeText={setSearchString}
+          />
           <IconButton
             style={styles.searchButton}
             icon="magnify"
             mode="outlined"
+            onPress={fetchProducts}
           />
         </View>
         <IconButton
