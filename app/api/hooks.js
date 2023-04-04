@@ -42,5 +42,6 @@ export const useShop = () => {
   const getCategories = (params) =>
     apiClient.get(`${endPoint}categories/`, params);
   const getProducts = (params) => apiClient.get(endPoint, params);
-  return { getProducts, getCategories };
+  const getTags = (params) => apiClient.get(`${endPoint}tags/`, params);
+  return { getProducts, getCategories, getTags };
 };

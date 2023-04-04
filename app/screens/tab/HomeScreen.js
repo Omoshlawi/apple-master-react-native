@@ -77,7 +77,9 @@ const HomeScreen = ({ navigation }) => {
           style={styles.searchButn}
           iconColor={colors.white}
           mode="outlined"
-          onPress={() => {}}
+          onPress={() => {
+            navigation.navigate(routes.SEARCH_SCREEN);
+          }}
           size={30}
         />
       </View>
