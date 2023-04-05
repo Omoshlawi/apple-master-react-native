@@ -43,5 +43,7 @@ export const useShop = () => {
     apiClient.get(`${endPoint}categories/`, params);
   const getProducts = (params) => apiClient.get(endPoint, params);
   const getTags = (params) => apiClient.get(`${endPoint}tags/`, params);
-  return { getProducts, getCategories, getTags };
+  const postOrder = (token, data) =>
+    apiClient.post("orders/", data, { headers: getAuthHeader(token) });
+  return { getProducts, getCategories, getTags, postOrder };
 };

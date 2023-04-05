@@ -62,6 +62,6 @@ export const useCartContext = () => {
     clearAll,
     totalCost: getTotalCost(),
     productCount: totalProducts(),
-    postItems: getPostItems,
+    postItems: getPostItems(),
   };
 };

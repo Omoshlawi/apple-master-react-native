@@ -1,6 +1,6 @@
 import { FlatList, StyleSheet, View } from "react-native";
 import React from "react";
-import { useCartContext } from "../../context/hooks";
+import { useCartContext, useUserContext } from "../../context/hooks";
 import AppSafeArea from "../../components/AppSafeArea";
 import {
   Avatar,
@@ -11,11 +11,13 @@ import {
   Text,
   Portal,
   Provider,
+  Snackbar,
 } from "react-native-paper";
 import colors from "../../utils/colors";
 import RatingBar from "../../components/ratingbar/RatingBar";
 import QuanterSizer from "../../components/input/QuanterSizer";
 import routes from "../../navigation/routes";
+import { useShop } from "../../api/hooks";
 
 const CartScreen = ({ navigation }) => {
   const {
@@ -27,9 +29,24 @@ const CartScreen = ({ navigation }) => {
     totalCost,
   } = useCartContext();
   const [state, setState] = React.useState({ open: false });
+  const [visible, setVisible] = React.useState(false);
+  const [snackMessage, setSnackMessage] = React.useState("");
+  const onToggleSnackBar = () => setVisible(!visible);
+  const onDismissSnackBar = () => setVisible(false);
   const onStateChange = ({ open }) => setState({ open });
-
-  const handleAddOrder = async () => {};
+  const { token } = useUserContext();
+  const { postOrder } = useShop();
+  const handleAddOrder = async () => {
+    const response = await postOrder(token, postItems);
+    if (!response.ok) {
+      setSnackMessage(response.data.items.join(";"));
+      onToggleSnackBar();
+      return console.log("CartScreen: ", response.problem, response.data);
+    }
+    setSnackMessage(" Your order was received successfully");
+    onToggleSnackBar();
+    clearAll();
+  };
 
   const { open } = state;
   return (
@@ -131,7 +148,7 @@ const CartScreen = ({ navigation }) => {
               {
                 icon: "share-all",
                 label: "Order now",
-                onPress: () => console.log("Pressed email"),
+                onPress: handleAddOrder,
               },
             ]}
             onStateChange={onStateChange}
@@ -143,6 +160,18 @@ const CartScreen = ({ navigation }) => {
           />
         </Portal>
       </Provider>
+      <Snackbar
+        visible={visible}
+        onDismiss={onDismissSnackBar}
+        action={{
+          label: "Dismiss",
+          onPress: () => {
+            // Do something
+          },
+        }}
+      >
+        {snackMessage}
+      </Snackbar>
     </AppSafeArea>
   );
 };
