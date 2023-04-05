@@ -2,13 +2,36 @@ import { FlatList, StyleSheet, View } from "react-native";
 import React from "react";
 import { useCartContext } from "../../context/hooks";
 import AppSafeArea from "../../components/AppSafeArea";
-import { Avatar, Card, IconButton, List, Text } from "react-native-paper";
+import {
+  Avatar,
+  Card,
+  FAB,
+  IconButton,
+  List,
+  Text,
+  Portal,
+  Provider,
+} from "react-native-paper";
 import colors from "../../utils/colors";
 import RatingBar from "../../components/ratingbar/RatingBar";
 import QuanterSizer from "../../components/input/QuanterSizer";
+import routes from "../../navigation/routes";
 
-const CartScreen = () => {
-  const { cartItems, addToCart, deleteFromCart } = useCartContext();
+const CartScreen = ({ navigation }) => {
+  const {
+    cartItems,
+    addToCart,
+    deleteFromCart,
+    clearAll,
+    postItems,
+    totalCost,
+  } = useCartContext();
+  const [state, setState] = React.useState({ open: false });
+  const onStateChange = ({ open }) => setState({ open });
+
+  const handleAddOrder = async () => {};
+
+  const { open } = state;
   return (
     <AppSafeArea>
       <FlatList
@@ -86,6 +109,40 @@ const CartScreen = () => {
           );
         }}
       />
+      <Provider>
+        <Portal>
+          <FAB.Group
+            open={open}
+            fabStyle={styles.fab}
+            label={`Ksh. ${totalCost}`}
+            backdropColor={colors.transparent}
+            visible
+            icon={open ? "close" : "dots-vertical"}
+            actions={[
+              {
+                icon: "plus",
+                onPress: () => navigation.navigate(routes.HOME_SCREEN),
+              },
+              {
+                icon: "notification-clear-all",
+                label: "Clear",
+                onPress: clearAll,
+              },
+              {
+                icon: "share-all",
+                label: "Order now",
+                onPress: () => console.log("Pressed email"),
+              },
+            ]}
+            onStateChange={onStateChange}
+            onPress={() => {
+              if (open) {
+                // do something if the speed dial is open
+              }
+            }}
+          />
+        </Portal>
+      </Provider>
     </AppSafeArea>
   );
 };
@@ -98,5 +155,15 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginHorizontal: 5,
     borderRadius: 20,
+  },
+  fab: {
+    backgroundColor: colors.white,
+    marginVertical: 3,
+  },
+  fabContainer: {
+    margin: 5,
+    position: "absolute",
+    right: 0,
+    bottom: 0,
   },
 });

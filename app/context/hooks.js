@@ -30,5 +30,38 @@ export const useCartContext = () => {
       cartItems.filter(({ product: prod }) => prod.url !== product.url)
     );
   };
-  return { cartItems, setCartItems, addToCart, deleteFromCart };
+  const clearAll = () => {
+    setCartItems([]);
+  };
+  const getTotalCost = () => {
+    const cost = cartItems.reduce(
+      (total, item) =>
+        total + parseFloat(item.product.price) * parseFloat(item.quantity),
+      0
+    );
+    return cost;
+  };
+  const totalProducts = () => {
+    const count = cartItems.reduce(
+      (accumulator, currentValue) => accumulator + currentValue.quantity,
+      0
+    );
+    return count;
+  };
+  const getPostItems = () => {
+    const items = cartItems.map(({ product: { url: product }, quantity }) => ({
+      product,
+      quantity,
+    }));
+    return { items };
+  };
+  return {
+    cartItems,
+    addToCart,
+    deleteFromCart,
+    clearAll,
+    totalCost: getTotalCost(),
+    productCount: totalProducts(),
+    postItems: getPostItems,
+  };
 };

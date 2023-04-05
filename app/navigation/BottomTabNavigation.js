@@ -14,11 +14,7 @@ const Tab = createBottomTabNavigator();
 const Navigator = Tab.Navigator;
 const Screen = Tab.Screen;
 function BottomTabNavigation() {
-  const { cartItems } = useCartContext();
-  const count = cartItems.reduce(
-    (accumulator, currentValue) => accumulator + currentValue.quantity,
-    0
-  );
+  const { cartItems, productCount: count } = useCartContext();
   return (
     <Navigator
       screenOptions={{
