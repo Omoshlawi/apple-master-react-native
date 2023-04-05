@@ -1,12 +1,20 @@
-import { FlatList, StyleSheet, TextInput, View, Slider } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  TextInput,
+  View,
+  Dimensions,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import AppSafeArea from "../../components/AppSafeArea";
 import colors from "../../utils/colors";
-import { Chip, IconButton } from "react-native-paper";
+import { Chip, IconButton, Text } from "react-native-paper";
 import { useShop } from "../../api/hooks";
 import ImageButton from "../../components/button/ImageButton";
 import Product from "../../components/product/Product";
 import MultiSlider from "@ptomasroos/react-native-multi-slider";
+
+const sliderWidth = Dimensions.get("window").width * 0.63;
 
 const SearchScreen = () => {
   const { getTags, getProducts, getCategories } = useShop();
@@ -16,7 +24,8 @@ const SearchScreen = () => {
   const [activeChips, setActiveChips] = useState([]);
   const [activeCategory, setActiveCtegory] = useState();
   const [searchString, setSearchString] = useState();
-  const [priceRange, setPriceRange] = useState();
+  const [priceRange, setPriceRange] = useState([4000, 300000]);
+  const [showSliderOverlay, setShowSliderOverlay] = useState(false);
 
   const fetchProducts = async () => {
     const productsResponse = await getProducts({
@@ -112,6 +121,7 @@ const SearchScreen = () => {
         />
       </View>
       <View style={styles.filters}>
+        <Text style={styles.headers}>Tags</Text>
         <FlatList
           data={tags}
           keyExtractor={({ name }) => name}
@@ -135,6 +145,7 @@ const SearchScreen = () => {
             </Chip>
           )}
         />
+        <Text style={styles.headers}>Product categories</Text>
         <FlatList
           data={categories}
           keyExtractor={({ url }) => url}
@@ -152,16 +163,30 @@ const SearchScreen = () => {
             />
           )}
         />
-        <MultiSlider
-          max={1000000}
-          min={0}
-          values={[4000, 300000]}
-          // onValuesChange={(values) => console.log(values)}
-          step={100}
-          enableLabel={true}
-          containerStyle={{ paddingHorizontal: 10 }}
-          onValuesChangeFinish={setPriceRange}
-        />
+        <Text style={styles.headers}>Price Range in Ksh</Text>
+        <View style={styles.sliderContainer}>
+          <Text variant="bodyLarge" style={styles.prices}>
+            {priceRange[0]}
+          </Text>
+          <MultiSlider
+            style={styles.slide}
+            sliderLength={sliderWidth}
+            max={1000000}
+            min={0}
+            values={priceRange}
+            onValuesChangeStart={() => setShowSliderOverlay(true)}
+            step={100}
+            enableLabel={showSliderOverlay}
+            containerStyle={{ paddingHorizontal: 10 }}
+            onValuesChangeFinish={(values) => {
+              setPriceRange(values);
+              setShowSliderOverlay(false);
+            }}
+          />
+          <Text variant="bodyLarge" style={styles.prices}>
+            {priceRange[1]}
+          </Text>
+        </View>
       </View>
       <View>
         <FlatList
@@ -178,6 +203,25 @@ const SearchScreen = () => {
 export default SearchScreen;
 
 const styles = StyleSheet.create({
+  prices: {
+    fontWeight: "bold",
+  },
+  headers: {
+    fontWeight: "bold",
+    color: colors.medium,
+    padding: 5,
+  },
+  slide: {
+    width: "50%",
+    backgroundColor: "red",
+  },
+  sliderContainer: {
+    backgroundColor: colors.white,
+    justifyContent: "center",
+    flexDirection: "row",
+    alignItems: "center",
+    borderRadius: 10,
+  },
   search: {
     backgroundColor: colors.white,
     flexDirection: "row",
