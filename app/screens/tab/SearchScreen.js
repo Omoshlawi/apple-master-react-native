@@ -188,7 +188,7 @@ const SearchScreen = () => {
           </Text>
         </View>
       </View>
-      <View>
+      <View style={{ flex: 1 }}>
         <FlatList
           data={products}
           numColumns={2}
