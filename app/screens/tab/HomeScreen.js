@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import AppSafeArea from "../../components/AppSafeArea";
 import { useShop, useUser } from "../../api/hooks";
@@ -51,15 +51,24 @@ const HomeScreen = ({ navigation }) => {
   return (
     <AppSafeArea>
       <View style={styles.headerontainer}>
-        {user && user.profile.image ? (
-          <Avatar.Image source={{ uri: user.profile.image }} size={45} />
-        ) : (
-          <Avatar.Icon
-            icon="account"
-            size={45}
-            style={{ backgroundColor: colors.light }}
-          />
-        )}
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate(routes.USER_NAVIGATION, {
+              screen: routes.PROFILE_SCREEN,
+              params: user,
+            })
+          }
+        >
+          {user && user.profile.image ? (
+            <Avatar.Image source={{ uri: user.profile.image }} size={45} />
+          ) : (
+            <Avatar.Icon
+              icon="account"
+              size={45}
+              style={{ backgroundColor: colors.light }}
+            />
+          )}
+        </TouchableOpacity>
         <IconButton
           icon="magnify"
           style={styles.searchButn}
