@@ -9,10 +9,12 @@ const TextInputField = ({
   value,
   onChangeText,
   keyboardType,
+  width,
+  backgroundColor,
   ...otherProps
 }) => {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { width, backgroundColor }]}>
       {icon && (
         <MaterialCommunityIcons name={icon} size={20} color={colors.medium} />
       )}

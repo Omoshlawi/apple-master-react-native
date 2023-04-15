@@ -1,11 +1,19 @@
 import { FlatList, StyleSheet, View, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useShop } from "../../api/hooks";
-import { Snackbar, Text, Card, List, Avatar } from "react-native-paper";
+import {
+  Snackbar,
+  Text,
+  Card,
+  List,
+  Avatar,
+  IconButton,
+} from "react-native-paper";
 import { useUserContext } from "../../context/hooks";
 import RatingBar from "../../components/ratingbar/RatingBar";
 import moment from "moment/moment";
 import colors from "../../utils/colors";
+import TextInputField from "../../components/input/TextInputField";
 
 const ReviewsScreen = ({ navigation, route }) => {
   const [reviews, setReviews] = useState([]);
@@ -13,9 +21,12 @@ const ReviewsScreen = ({ navigation, route }) => {
   const { token } = useUserContext();
   const [visible, setVisible] = useState(false);
   const [message, setMessage] = useState("");
-  const { getReviews } = useShop();
+  const [formState, setFormState] = useState({ review: "", rating: 3 });
+  const { getReviews, addReview } = useShop();
   const handleFetch = async () => {
+    setRefreshing(true);
     const revResponse = await getReviews();
+    setRefreshing(false);
     if (!revResponse.ok) {
       console.log("ReviewsScreen: ", revResponse.problem, revResponse.data);
     } else {
@@ -23,6 +34,22 @@ const ReviewsScreen = ({ navigation, route }) => {
     }
   };
 
+  const handleSubmit = async () => {
+    setVisible(false);
+    const response = await addReview(token, {
+      ...formState,
+      product: route.params.url,
+    });
+    if (!response.ok) {
+      setMessage("Please provide both rating and review");
+      setVisible(true);
+      return console.log("ReviewScreen: ", response.problem, response.data);
+    }
+    setMessage("Review added successfully.Thank you!");
+    setVisible(true);
+    await handleFetch();
+    setFormState({ review: "", rating: 3 });
+  };
   useEffect(() => {
     handleFetch();
   }, []);
@@ -42,16 +69,15 @@ const ReviewsScreen = ({ navigation, route }) => {
               author: { name, image },
             } = review;
             return (
-              <Card>
+              <Card style={styles.review}>
                 <Card.Title
                   left={(props) =>
                     image ? (
-                      <Avatar.Image source={{ uri: image }} {...props} />
+                      <Avatar.Image source={{ uri: image }} {...props}  />
                     ) : (
-                      <Avatar.Icon icon="account" {...props} />
+                      <Avatar.Icon icon="account" {...props}  />
                     )
                   }
-                  subtitleVariant="bodyLarge"
                   subtitle={name}
                 />
                 <Card.Content>
@@ -72,10 +98,20 @@ const ReviewsScreen = ({ navigation, route }) => {
         <Text style={styles.label}>Rating:</Text>
         <RatingBar
           align="flex-start"
-          //   defaultRating={formState.rating}
+          defaultRating={formState.rating}
           onRatingChange={(rating) => setFormState({ ...formState, rating })}
         />
         <Text style={styles.label}>Review:</Text>
+        <View style={styles.input}>
+          <TextInputField
+            placeholder="Leave your review here ..."
+            width="85%"
+            onChangeText={(review) => setFormState({ ...formState, review })}
+            value={formState.review}
+            backgroundColor={colors.light}
+          />
+          <IconButton icon="send" mode="outlined" onPress={handleSubmit} />
+        </View>
       </View>
       <Snackbar
         visible={visible}
@@ -106,6 +142,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   form: {
-    paddingBottom: 20,
+    paddingVertical: 20,
+    paddingHorizontal: 10,
+    backgroundColor: colors.white,
+    borderRadius: 30,
+  },
+  input: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  review: {
+    marginBottom: 5,
   },
 });
