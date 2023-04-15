@@ -1,4 +1,10 @@
-import { ScrollView, StyleSheet, View, Dimensions } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  View,
+  Dimensions,
+  TouchableOpacity,
+} from "react-native";
 import React, { useState } from "react";
 import { Avatar, Button, Card, IconButton, Text } from "react-native-paper";
 import ScrollableThumbnails from "../../components/ScrollableThumbnails";
@@ -7,6 +13,7 @@ import RatingBar from "../../components/ratingbar/RatingBar";
 import Quantorsizer from "../../components/input/Quantorsizer";
 import ExpandableText from "../../components/display/ExpandableText";
 import { useCartContext } from "../../context/hooks";
+import routes from "../../navigation/routes";
 
 const ProductDetailScreen = ({ navigation, route }) => {
   const [quantity, setQuantity] = useState(1);
@@ -67,10 +74,14 @@ const ProductDetailScreen = ({ navigation, route }) => {
               {`${categry} | Ksh. ${price}`}
             </Text>
           </View>
-          <View>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate(routes.PRODUCT_REVIEW_SCREEN, route.params)
+            }
+          >
             <RatingBar starSize={20} defaultRating={rating} disabled />
             <Text variant="bodyMedium">({reviews} Reviews)</Text>
-          </View>
+          </TouchableOpacity>
         </View>
         <View>
           <Text style={styles.text} variant="headlineLarge">

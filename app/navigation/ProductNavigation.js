@@ -4,6 +4,7 @@ import RegisterScreen from "../screens/auth/RegisterScreen";
 import WelcomeScreen from "../screens/auth/WelcomeScreen";
 import routes from "./routes";
 import ProductDetailScreen from "../screens/product/ProductDetailScreen";
+import ReviewsScreen from "../screens/product/ReviewsScreen";
 
 const Stack = createStackNavigator();
 
@@ -17,6 +18,11 @@ const ProductNavigation = () => {
         name={routes.PRODUCT_SCREEN}
         component={ProductDetailScreen}
         options={({ route }) => ({ title: route.params.name })}
+      />
+      <Screen
+        name={routes.PRODUCT_REVIEW_SCREEN}
+        component={ReviewsScreen}
+        options={({ route }) => ({ title: `${route.params.name} reviews` })}
       />
     </Navigator>
   );

@@ -45,5 +45,10 @@ export const useShop = () => {
   const getTags = (params) => apiClient.get(`${endPoint}tags/`, params);
   const postOrder = (token, data) =>
     apiClient.post("orders/", data, { headers: getAuthHeader(token) });
-  return { getProducts, getCategories, getTags, postOrder };
+  const getReviews = (params) => apiClient.get(`${endPoint}reviews/`);
+  const addReview = (token, data) =>
+    apiClient.post(`${endPoint}reviews/`, data, {
+      headers: getAuthHeader(token),
+    });
+  return { getProducts, getCategories, getTags, postOrder, getReviews };
 };
