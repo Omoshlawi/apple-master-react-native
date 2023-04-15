@@ -6,57 +6,94 @@ import PasswordInputField from "../../components/input/PasswordInputField";
 import colors from "../../utils/colors";
 import AppButton from "../../components/input/AppButton";
 import routes from "../../navigation/routes";
+import * as Yup from "yup";
+import {
+  AppForm,
+  AppFormField,
+  AppFormSubmitButton,
+} from "../../components/forms";
+import { useUserContext } from "../../context/hooks";
+import { useUser } from "../../api/hooks";
+
+const validationSchemer = Yup.object().shape({
+  username: Yup.string().label("Username").required(),
+  email: Yup.string().label("Email").required(),
+  password: Yup.string().label("Password").required(),
+  confirm_password: Yup.string().label("Confirm Password").required(),
+});
 
 const RegisterScreen = ({ navigation }) => {
-  const [formState, setFormState] = useState({
-    username: "",
-    email: "",
-    password: "",
-    confirm_password: "",
-  });
+  const [loading, setLoading] = useState(false);
+  const { setToken, setUser } = useUserContext();
+  const { register } = useUser();
+
+  const handleRegister = async (values, { setFieldError }) => {
+    setLoading(true);
+    const response = await register(values);
+    setLoading(false);
+    if (!response.ok) {
+      if (response.problem === "CLIENT_ERROR") {
+        for (const key in response.data) {
+          const element = response.data[key];
+          if (element instanceof Array) {
+            setFieldError(key, element.join(";"));
+          } else if (element instanceof Object) {
+            for (const key1 in element) {
+              const element1 = element[key1];
+              setFieldError(key1, element1.join(";"));
+            }
+          }
+        }
+        return;
+      }
+    }
+
+    const { data: user } = response;
+    const token = user.token;
+    delete user.token;
+    setUser(user);
+    setToken(token);
+  };
   return (
     <View style={styles.container}>
       <Logo size={150} variant="black" />
       <View style={styles.form}>
-        <TextInputField
-          icon="account"
-          placeholder="Enter username"
-          value={formState.username}
-          onChangeText={(username) => {
-            setFormState({ ...formState, username });
+        <AppForm
+          initialValues={{
+            username: "",
+            email: "",
+            password: "",
+            confirm_password: "",
           }}
-        />
-        <TextInputField
-          icon="email"
-          placeholder="Enter email"
-          value={formState.email}
-          onChangeText={(email) => {
-            setFormState({ ...formState, email });
-          }}
-          keyboardType="email-address"
-        />
-        <PasswordInputField
-          icon="lock"
-          placeholder="Enter Password"
-          value={formState.password}
-          onChangeText={(password) => {
-            setFormState({ ...formState, password });
-          }}
-        />
-        <PasswordInputField
-          icon="lock"
-          placeholder="Confirm Password"
-          value={formState.confirm_password}
-          onChangeText={(confirm_password) => {
-            setFormState({ ...formState, confirm_password });
-          }}
-        />
-        <AppButton
-          title="Sign Up"
-          onPress={() => {
-            console.log(formState);
-          }}
-        />
+          validationSchema={validationSchemer}
+          onSubmit={handleRegister}
+        >
+          <AppFormField
+            icon="account"
+            placeholder="Enter username"
+            name="username"
+          />
+          <AppFormField
+            icon="email"
+            placeholder="Enter email"
+            name="email"
+            keyboardType="email-address"
+          />
+          <AppFormField
+            password
+            name="password"
+            icon="lock"
+            placeholder="Enter Password"
+          />
+          <AppFormField
+            password
+            name="confirm_password"
+            icon="lock"
+            placeholder="Confirm Password"
+          />
+
+          <AppFormSubmitButton title="Register" loading={loading} />
+        </AppForm>
 
         <View style={{ flexDirection: "row", padding: 10 }}>
           <Text>Already have and account? </Text>

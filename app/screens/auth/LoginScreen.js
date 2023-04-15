@@ -27,7 +27,6 @@ const LoginScreen = ({ navigation }) => {
 
   const handleLogin = async (values, { setFieldError }) => {
     setLoading(true);
-    console.log(values);
     const response = await login(values);
     setLoading(false)
     if (!response.ok) {
