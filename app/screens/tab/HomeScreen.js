@@ -1,8 +1,14 @@
 import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import AppSafeArea from "../../components/AppSafeArea";
-import { useShop, useUser } from "../../api/hooks";
-import { Avatar, IconButton, List, Text } from "react-native-paper";
+import { httpService, useShop, useUser } from "../../api/hooks";
+import {
+  ActivityIndicator,
+  Avatar,
+  IconButton,
+  List,
+  Text,
+} from "react-native-paper";
 import { useShopContext, useUserContext } from "../../context/hooks";
 import colors from "../../utils/colors";
 import ScrollableIconButtons from "../../components/button/ScrollableIconButtons";
@@ -10,13 +16,22 @@ import routes from "../../navigation/routes";
 import Product from "../../components/product/Product";
 
 const HomeScreen = ({ navigation }) => {
-  const { getCategories, getProducts } = useShop({ page_size: 20 });
+  const { getCategories, getProducts } = useShop();
   const { products, setProducts, categories, setCategories } = useShopContext();
   const { user } = useUserContext();
   const { getUser } = useUser();
+  const [loading, setLoading] = useState(false);
+  const [paginator, setPaginator] = useState({
+    next: null,
+    previous: null,
+    count: 0,
+    page_size: 10,
+  });
 
   const handleFetch = async () => {
-    const categoryResponse = await getCategories({ page_size: 20 });
+    const categoryResponse = await getCategories({
+      page_size: paginator.page_size,
+    });
     if (!categoryResponse.ok) {
       console.log(
         "Home screen: ",
@@ -28,6 +43,7 @@ const HomeScreen = ({ navigation }) => {
       data: { results: categoryResult },
     } = categoryResponse;
     setCategories(categoryResult);
+
     const productResponse = await getProducts();
     if (!productResponse.ok) {
       console.log(
@@ -37,9 +53,27 @@ const HomeScreen = ({ navigation }) => {
       );
     }
     const {
-      data: { results: productResult },
+      data: { results: productResult, count, next, previous },
     } = productResponse;
+    setPaginator({ ...paginator, count, previous, next });
     setProducts(productResult);
+  };
+
+  const handlePagination = async ({ distanceFromEnd }) => {
+    if (paginator.next && !loading) {
+      setLoading(true);
+      const response = await httpService.get(paginator.next);
+      setLoading(false);
+      if (!response.ok) {
+        console.log("HomeScreen", response.problem, response.data);
+      } else {
+        const {
+          data: { results: productResult, count, next, previous },
+        } = response;
+        setPaginator({ ...paginator, count, previous, next });
+        setProducts([...products, ...productResult]);
+      }
+    }
   };
 
   useEffect(() => {
@@ -100,12 +134,15 @@ const HomeScreen = ({ navigation }) => {
           data={products}
           numColumns={2}
           keyExtractor={({ url }) => url}
+          onEndReached={handlePagination}
+          onEndReachedThreshold={0.5}
           contentContainerStyle={{
             alignItems: "center",
           }}
           renderItem={({ item }) => {
             return <Product product={item} />;
           }}
+          ListFooterComponent={() => (loading ? <ActivityIndicator /> : null)}
         />
       </View>
     </AppSafeArea>

@@ -37,6 +37,11 @@ export const useUser = () => {
   return { login, logout, getUser, register, putUser, getOrders, getPayments };
 };
 
+export const httpService = {
+  get: apiClient.get,
+  post: apiClient.post,
+  put: apiClient.put,
+};
 export const useShop = () => {
   const endPoint = "shop/";
   const getCategories = (params) =>
