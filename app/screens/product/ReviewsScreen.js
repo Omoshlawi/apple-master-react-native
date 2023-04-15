@@ -88,7 +88,11 @@ const ReviewsScreen = ({ navigation, route }) => {
                     image ? (
                       <Avatar.Image source={{ uri: image }} {...props} />
                     ) : (
-                      <Avatar.Icon icon="account" {...props} />
+                      <Avatar.Icon
+                        icon="account"
+                        {...props}
+                        style={{ backgroundColor: colors.light }}
+                      />
                     )
                   }
                   subtitle={name}
