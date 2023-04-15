@@ -9,7 +9,7 @@ import {
   Avatar,
   IconButton,
 } from "react-native-paper";
-import { useUserContext } from "../../context/hooks";
+import { useShopContext, useUserContext } from "../../context/hooks";
 import RatingBar from "../../components/ratingbar/RatingBar";
 import moment from "moment/moment";
 import colors from "../../utils/colors";
@@ -22,7 +22,8 @@ const ReviewsScreen = ({ navigation, route }) => {
   const [visible, setVisible] = useState(false);
   const [message, setMessage] = useState("");
   const [formState, setFormState] = useState({ review: "", rating: 3 });
-  const { getReviews, addReview } = useShop();
+  const { getReviews, addReview, getProducts } = useShop();
+  const { setProducts } = useShopContext();
   const handleFetch = async () => {
     setRefreshing(true);
     const revResponse = await getReviews();
@@ -32,6 +33,18 @@ const ReviewsScreen = ({ navigation, route }) => {
     } else {
       setReviews(revResponse.data.results);
     }
+    const productResponse = await getProducts();
+    if (!productResponse.ok) {
+      console.log(
+        "ReviewsScreen: ",
+        productResponse.problem,
+        productResponse.data
+      );
+    }
+    const {
+      data: { results: productResult },
+    } = productResponse;
+    setProducts(productResult);
   };
 
   const handleSubmit = async () => {
@@ -73,9 +86,9 @@ const ReviewsScreen = ({ navigation, route }) => {
                 <Card.Title
                   left={(props) =>
                     image ? (
-                      <Avatar.Image source={{ uri: image }} {...props}  />
+                      <Avatar.Image source={{ uri: image }} {...props} />
                     ) : (
-                      <Avatar.Icon icon="account" {...props}  />
+                      <Avatar.Icon icon="account" {...props} />
                     )
                   }
                   subtitle={name}
