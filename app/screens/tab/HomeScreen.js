@@ -3,21 +3,20 @@ import React, { useEffect, useState } from "react";
 import AppSafeArea from "../../components/AppSafeArea";
 import { useShop, useUser } from "../../api/hooks";
 import { Avatar, IconButton, List, Text } from "react-native-paper";
-import { useUserContext } from "../../context/hooks";
+import { useShopContext, useUserContext } from "../../context/hooks";
 import colors from "../../utils/colors";
 import ScrollableIconButtons from "../../components/button/ScrollableIconButtons";
 import routes from "../../navigation/routes";
 import Product from "../../components/product/Product";
 
 const HomeScreen = ({ navigation }) => {
-  const { getCategories, getProducts } = useShop({page_size: 20});
-  const [categories, setCategories] = useState([]);
-  const [products, setProducts] = useState([]);
+  const { getCategories, getProducts } = useShop({ page_size: 20 });
+  const { products, setProducts, categories, setCategories } = useShopContext();
   const { user } = useUserContext();
   const { getUser } = useUser();
 
   const handleFetch = async () => {
-    const categoryResponse = await getCategories({page_size: 20});
+    const categoryResponse = await getCategories({ page_size: 20 });
     if (!categoryResponse.ok) {
       console.log(
         "Home screen: ",

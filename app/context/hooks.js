@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import UserContext from "./UserContext";
 import CartContext from "./CartContext";
+import ShopContext from "./ShopContext";
 
 export const useUserContext = () => {
   const { clearToken, user, setUser, token, setToken } =
@@ -64,4 +65,10 @@ export const useCartContext = () => {
     productCount: totalProducts(),
     postItems: getPostItems(),
   };
+};
+
+export const useShopContext = () => {
+  const { products, setProducts, categories, setCategories } =
+    useContext(ShopContext);
+  return { products, categories, setProducts, setCategories };
 };

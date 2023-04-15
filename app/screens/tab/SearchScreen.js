@@ -13,14 +13,14 @@ import { useShop } from "../../api/hooks";
 import ImageButton from "../../components/button/ImageButton";
 import Product from "../../components/product/Product";
 import MultiSlider from "@ptomasroos/react-native-multi-slider";
+import { useShopContext } from "../../context/hooks";
 
 const sliderWidth = Dimensions.get("window").width * 0.63;
 
 const SearchScreen = () => {
   const { getTags, getProducts, getCategories } = useShop();
-  const [categories, setCategories] = useState([]);
   const [tags, setTags] = useState([]);
-  const [products, setProducts] = useState([]);
+  const { products, setProducts, categories, setCategories } = useShopContext();
   const [activeChips, setActiveChips] = useState([]);
   const [activeCategory, setActiveCtegory] = useState();
   const [searchString, setSearchString] = useState();
