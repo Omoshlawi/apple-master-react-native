@@ -121,48 +121,56 @@ const SearchScreen = () => {
         />
       </View>
       <View style={styles.filters}>
-        <Text style={styles.headers}>Tags</Text>
-        <FlatList
-          data={tags}
-          keyExtractor={({ name }) => name}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          renderItem={({ item: { name } }) => (
-            <Chip
-              style={[
-                styles.chip,
-                activeChips.indexOf(name) !== -1
-                  ? { backgroundColor: colors.light }
-                  : {},
-              ]}
-              selected={activeChips.indexOf(name) !== -1}
-              showSelectedOverlay
-              onPress={() => {
-                handleTagClick(name);
-              }}
-            >
-              {name}
-            </Chip>
-          )}
-        />
-        <Text style={styles.headers}>Product categories</Text>
-        <FlatList
-          data={categories}
-          keyExtractor={({ url }) => url}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          renderItem={({ item: { name, image } }) => (
-            <ImageButton
-              style={styles.chip}
-              image={{ uri: image }}
-              title={name}
-              onPress={() => handleCategoryClicked(name)}
-              activeBackgroundColor={colors.medium}
-              activeTintColor={colors.white}
-              active={name === activeCategory}
+        {tags.length > 0 && (
+          <>
+            <Text style={styles.headers}>Tags</Text>
+            <FlatList
+              data={tags}
+              keyExtractor={({ name }) => name}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              renderItem={({ item: { name } }) => (
+                <Chip
+                  style={[
+                    styles.chip,
+                    activeChips.indexOf(name) !== -1
+                      ? { backgroundColor: colors.light }
+                      : {},
+                  ]}
+                  selected={activeChips.indexOf(name) !== -1}
+                  showSelectedOverlay
+                  onPress={() => {
+                    handleTagClick(name);
+                  }}
+                >
+                  {name}
+                </Chip>
+              )}
             />
-          )}
-        />
+          </>
+        )}
+        {categories.length > 0 && (
+          <>
+            <Text style={styles.headers}>Product categories</Text>
+            <FlatList
+              data={categories}
+              keyExtractor={({ url }) => url}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              renderItem={({ item: { name, image } }) => (
+                <ImageButton
+                  style={styles.chip}
+                  image={{ uri: image }}
+                  title={name}
+                  onPress={() => handleCategoryClicked(name)}
+                  activeBackgroundColor={colors.medium}
+                  activeTintColor={colors.white}
+                  active={name === activeCategory}
+                />
+              )}
+            />
+          </>
+        )}
         <Text style={styles.headers}>Price Range in Ksh</Text>
         <View style={styles.sliderContainer}>
           <Text variant="bodyLarge" style={styles.prices}>

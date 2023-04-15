@@ -15,6 +15,7 @@ const ProductDetailScreen = ({ navigation, route }) => {
     name,
     image,
     description,
+    additional_info,
     price,
     rating,
     tags,
@@ -42,6 +43,11 @@ const ProductDetailScreen = ({ navigation, route }) => {
             text={description}
             threshHold={300}
             title="Description"
+          />
+          <ExpandableText
+            text={additional_info}
+            threshHold={300}
+            title="Additional Infomation"
           />
         </Card>
       </ScrollView>
@@ -85,8 +91,8 @@ const ProductDetailScreen = ({ navigation, route }) => {
                 icon="cart"
                 textColor={colors.primary}
                 onPress={() => {
-                  addToCart({ product: route.params, quantity })
-                  navigation.goBack()
+                  addToCart({ product: route.params, quantity });
+                  navigation.goBack();
                 }}
               >
                 AddToCart

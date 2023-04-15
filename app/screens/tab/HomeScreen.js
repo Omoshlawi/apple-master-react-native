@@ -10,14 +10,14 @@ import routes from "../../navigation/routes";
 import Product from "../../components/product/Product";
 
 const HomeScreen = ({ navigation }) => {
-  const { getCategories, getProducts } = useShop();
+  const { getCategories, getProducts } = useShop({page_size: 20});
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const { user } = useUserContext();
   const { getUser } = useUser();
 
   const handleFetch = async () => {
-    const categoryResponse = await getCategories();
+    const categoryResponse = await getCategories({page_size: 20});
     if (!categoryResponse.ok) {
       console.log(
         "Home screen: ",
