@@ -23,8 +23,10 @@ const ProfileForm = ({ initial }) => {
   const { setUser } = useUserContext();
   const { putUser } = useUser();
   const navigation = useNavigation()
+  const [loading, setLoading] = useState(false)
   const handleSubmit = async (values, { setFieldError }) => {
     // return console.log(values);
+    setLoading(true)
     const { image, first_name, last_name, gender, phone_number } = values;
     const formData = new FormData();
     formData.append("first_name", first_name);
@@ -33,6 +35,7 @@ const ProfileForm = ({ initial }) => {
     formData.append("profile.phone_number", phone_number);
     formData.append("profile.image", getFormFileFromUri(image));
     const resp = await putUser(formData);
+    setLoading(false)
     if (!resp.ok) {
       if (resp.problem === "CLIENT_ERROR") {
         for (const key in resp.data) {
@@ -91,7 +94,7 @@ const ProfileForm = ({ initial }) => {
           data={genderOptions}
           setData={setGenderOptions}
         />
-        <AppFormSubmitButton title="Update" />
+        <AppFormSubmitButton title="Update" loading={loading}/>
       </AppForm>
     </View>
   );

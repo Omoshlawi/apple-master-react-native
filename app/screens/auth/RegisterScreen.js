@@ -44,7 +44,7 @@ const RegisterScreen = ({ navigation }) => {
             }
           }
         }
-        return;
+        return console.log("LoginScreen: ", response.problem, response.data);
       }
     }
 

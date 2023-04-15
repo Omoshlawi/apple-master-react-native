@@ -21,6 +21,7 @@ const HomeScreen = ({ navigation }) => {
   const { user } = useUserContext();
   const { getUser } = useUser();
   const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [paginator, setPaginator] = useState({
     next: null,
     previous: null,
@@ -29,9 +30,12 @@ const HomeScreen = ({ navigation }) => {
   });
 
   const handleFetch = async () => {
+    setRefreshing(true);
     const categoryResponse = await getCategories({
       page_size: paginator.page_size,
     });
+    const productResponse = await getProducts();
+    setRefreshing(false);
     if (!categoryResponse.ok) {
       console.log(
         "Home screen: ",
@@ -44,7 +48,6 @@ const HomeScreen = ({ navigation }) => {
     } = categoryResponse;
     setCategories(categoryResult);
 
-    const productResponse = await getProducts();
     if (!productResponse.ok) {
       console.log(
         "Home screen: ",
@@ -60,19 +63,20 @@ const HomeScreen = ({ navigation }) => {
   };
 
   const handlePagination = async ({ distanceFromEnd }) => {
-    if (paginator.next && !loading) {
-      setLoading(true);
-      const response = await httpService.get(paginator.next);
-      setLoading(false);
-      if (!response.ok) {
-        console.log("HomeScreen", response.problem, response.data);
-      } else {
-        const {
-          data: { results: productResult, count, next, previous },
-        } = response;
-        setPaginator({ ...paginator, count, previous, next });
-        setProducts([...products, ...productResult]);
-      }
+    if (!paginator.next || loading || refreshing) {
+      return;
+    }
+    setLoading(true);
+    const response = await httpService.get(paginator.next);
+    setLoading(false);
+    if (!response.ok) {
+      console.log("HomeScreen", response.problem, response.data);
+    } else {
+      const {
+        data: { results: productResult, count, next, previous },
+      } = response;
+      setPaginator({ ...paginator, count, previous, next });
+      setProducts([...products, ...productResult]);
     }
   };
 
@@ -136,6 +140,8 @@ const HomeScreen = ({ navigation }) => {
           keyExtractor={({ url }) => url}
           onEndReached={handlePagination}
           onEndReachedThreshold={0.5}
+          refreshing={refreshing}
+          onRefresh={handleFetch}
           contentContainerStyle={{
             alignItems: "center",
           }}

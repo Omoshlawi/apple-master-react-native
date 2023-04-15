@@ -178,9 +178,11 @@ const CartScreen = ({ navigation }) => {
         visible={visible}
         onDismiss={onDismissSnackBar}
         action={{
-          label: "Dismiss",
+          label: "View Orders",
           onPress: () => {
-            // Do something
+            navigation.navigate(routes.USER_NAVIGATION, {
+              screen: routes.ORDERS_SCREEN,
+            });
           },
         }}
       >

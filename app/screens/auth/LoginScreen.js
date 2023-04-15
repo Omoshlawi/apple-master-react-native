@@ -28,7 +28,7 @@ const LoginScreen = ({ navigation }) => {
   const handleLogin = async (values, { setFieldError }) => {
     setLoading(true);
     const response = await login(values);
-    setLoading(false)
+    setLoading(false);
     if (!response.ok) {
       if (response.problem === "CLIENT_ERROR") {
         for (const key in response.data) {
@@ -42,10 +42,10 @@ const LoginScreen = ({ navigation }) => {
             }
           }
         }
-        return;
+        return console.log("LoginScreen: ", response.problem, response.data);
       }
     }
-    
+
     const { data: user } = response;
     const token = user.token;
     delete user.token;
