@@ -1,7 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 import AppForm from "../../forms/AppForm";
-import * as Yup from "yup";
 import { getFormFileFromUri } from "../../../utils/helpers";
 import AppFormField from "../../forms/AppFormField";
 import AppFormImagePicker from "../../forms/AppFormImagePicker";
@@ -11,6 +10,7 @@ import { useUser } from "../../../api/hooks";
 import { useUserContext } from "../../../context/hooks";
 import { useNavigation } from "@react-navigation/native";
 
+import * as Yup from "yup";
 const validationSchemer = Yup.object().shape({
   first_name: Yup.string().label("First Name"),
   last_name: Yup.string().label("Last Name"),

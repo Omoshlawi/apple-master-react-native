@@ -8,47 +8,74 @@ import AppButton from "../../components/input/AppButton";
 import routes from "../../navigation/routes";
 import { useUser } from "../../api/hooks";
 import { useUserContext } from "../../context/hooks";
+import * as Yup from "yup";
+import {
+  AppForm,
+  AppFormField,
+  AppFormSubmitButton,
+} from "../../components/forms";
+
+const validationSchemer = Yup.object().shape({
+  username: Yup.string().label("Username").required(),
+  password: Yup.string().label("Password").required(),
+});
 
 const LoginScreen = ({ navigation }) => {
-  const [formState, setFormState] = useState({
-    username: "",
-    password: "",
-  });
   const { setToken, setUser } = useUserContext();
   const { login } = useUser();
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = async () => {
-    const response = await login(formState);
-    if (!response.ok)
-      return console.log("LoginScreen: ", response.problem, response.data);
+  const handleLogin = async (values, { setFieldError }) => {
+    setLoading(true);
+    console.log(values);
+    const response = await login(values);
+    setLoading(false)
+    if (!response.ok) {
+      if (response.problem === "CLIENT_ERROR") {
+        for (const key in response.data) {
+          const element = response.data[key];
+          if (element instanceof Array) {
+            setFieldError(key, element.join(";"));
+          } else if (element instanceof Object) {
+            for (const key1 in element) {
+              const element1 = element[key1];
+              setFieldError(key1, element1.join(";"));
+            }
+          }
+        }
+        return;
+      }
+    }
+    
     const { data: user } = response;
     const token = user.token;
     delete user.token;
     setUser(user);
-    setToken(token)
+    setToken(token);
   };
 
   return (
     <View style={styles.container}>
       <Logo size={150} variant="black" />
       <View style={styles.form}>
-        <TextInputField
-          icon="account"
-          placeholder="Enter username"
-          value={formState.username}
-          onChangeText={(username) => {
-            setFormState({ ...formState, username });
-          }}
-        />
-        <PasswordInputField
-          icon="lock"
-          placeholder="Enter Password"
-          value={formState.password}
-          onChangeText={(password) => {
-            setFormState({ ...formState, password });
-          }}
-        />
-        <AppButton title="Login" onPress={handleLogin} />
+        <AppForm
+          validationSchema={validationSchemer}
+          initialValues={{ username: "", password: "" }}
+          onSubmit={handleLogin}
+        >
+          <AppFormField
+            icon="account"
+            name="username"
+            placeholder="Enter username"
+          />
+          <AppFormField
+            icon="lock"
+            password
+            name="password"
+            placeholder="Enter Password"
+          />
+          <AppFormSubmitButton title="Login" loading={loading} />
+        </AppForm>
 
         <View style={{ flexDirection: "row", padding: 10 }}>
           <Text>Don't have and account? </Text>

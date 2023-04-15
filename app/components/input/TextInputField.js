@@ -10,7 +10,7 @@ const TextInputField = ({
   onChangeText,
   keyboardType,
   width,
-  backgroundColor,
+  backgroundColor = colors.white,
   ...otherProps
 }) => {
   return (
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 20,
     padding: 10,
-    backgroundColor: colors.white,
+
     margin: 5,
   },
   text: {

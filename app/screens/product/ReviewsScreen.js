@@ -26,7 +26,7 @@ const ReviewsScreen = ({ navigation, route }) => {
   const { setProducts } = useShopContext();
   const handleFetch = async () => {
     setRefreshing(true);
-    const revResponse = await getReviews();
+    const revResponse = await getReviews({ product: route.params.name });
     setRefreshing(false);
     if (!revResponse.ok) {
       console.log("ReviewsScreen: ", revResponse.problem, revResponse.data);
