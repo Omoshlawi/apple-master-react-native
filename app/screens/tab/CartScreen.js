@@ -28,6 +28,7 @@ const CartScreen = ({ navigation }) => {
     clearAll,
     postItems,
     totalCost,
+    getPostItemsFormData,
   } = useCartContext();
   const [state, setState] = React.useState({ open: false });
   const [visible, setVisible] = React.useState(false);
@@ -38,6 +39,8 @@ const CartScreen = ({ navigation }) => {
   const { token } = useUserContext();
   const { postOrder } = useShop();
   const handleAddOrder = async () => {
+
+    // return console.log(getPostItemsFormData());
     const response = await postOrder(token, postItems);
     if (!response.ok) {
       setSnackMessage(response.data.items.join(";"));

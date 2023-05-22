@@ -56,7 +56,24 @@ export const useCartContext = () => {
     }));
     return { items };
   };
+  const getPostItemsFormData = () => {
+    if (!cartItems) {
+      throw new Error("cartItems is null or undefined");
+    }
+    const formData = new FormData();
+    const items = cartItems.map(({ product: { url: product }, quantity }) => ({
+      product,
+      quantity,
+    }));
+    items.forEach((item, index) => {
+      formData.append(`items[${index}][product]`, item.product);
+      formData.append(`items[${index}][quantity]`, item.quantity);
+    });
+    return formData;
+  };
+
   return {
+    getPostItemsFormData,
     cartItems,
     addToCart,
     deleteFromCart,

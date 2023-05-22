@@ -49,7 +49,7 @@ export const useShop = () => {
   const getProducts = (params) => apiClient.get(endPoint, params);
   const getTags = (params) => apiClient.get(`${endPoint}tags/`, params);
   const postOrder = (token, data) =>
-    apiClient.post("orders/", data, { headers: getAuthHeader(token) });
+    apiClient.post("orders/", data, { headers: {...getAuthHeader(token)} });
   const getReviews = (params) => apiClient.get(`${endPoint}reviews/`, params);
   const addReview = (token, data) =>
     apiClient.post(`${endPoint}reviews/`, data, {
